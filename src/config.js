@@ -5,7 +5,7 @@
 export default {
     ENV: process.env.NODE_ENV || 'dev',
     persistence: process.env.PERSISTENCE,
-    port: process.env.SERVER_PORT || 8080,
+    port: process.env.PORT || 8080,
     db: {
         mongodbURL: process.env.DB_MONGO_ATLAS,
         mongodbURL_TEST: process.env.DB_MONGO_ATLAS_TEST
