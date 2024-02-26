@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "start": "node -r dotenv/config .",
+    "start": "node src/server.js",
     "dev": "nodemon --ext js,json,yaml,yml,handlebars --watch src --exec \"node -r dotenv/config\" .",
     "test": "npx mocha ./tests/**/*.js"
   },
