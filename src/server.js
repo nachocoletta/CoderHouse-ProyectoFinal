@@ -9,12 +9,12 @@ import 'dotenv/config';
 // await init();
 
 // const server = http.createServer(app);
-const SERVER_PORT = config.port || 8080;
+const PORT = config.port || 8080;
 
 
-const httpServer = app.listen(SERVER_PORT, () => {
+const httpServer = app.listen(PORT, () => {
   // req.logger.info(`Server running on http://localhost:${SERVER_PORT} 🚀`)
-  console.log(`Server running on http://localhost:${SERVER_PORT} 🚀`);
+  console.log(`Server running on http://localhost:${PORT} 🚀`);
 });
 
 await init(httpServer);
