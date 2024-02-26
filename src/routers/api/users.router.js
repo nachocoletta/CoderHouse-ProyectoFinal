@@ -1,4 +1,3 @@
-import express from 'express';
 import { Router } from "express";
 import { uploader, uploaderV2 } from "../../helpers/utils.js";
 import passport from "passport";
@@ -9,38 +8,11 @@ import { documentTypes } from '../../models/user.model.js';
 import UsersDTO from '../../dto/users.dto.js';
 import { authorizationMiddleware } from "../../helpers/utils.js";
 
+
 const router = Router();
-
-// router.get('/premium/:uid',
-//     async (req, res, next) => {
-//         const { uid } = req.params;
-
-//         try {
-//             let user = await UsersController.getById(uid);
-
-//             if (user) {
-//                 if (user.rol === 'user') {
-
-//                     await UsersController.updateById(uid, { rol: "premium" })
-//                 } else {
-//                     await UsersController.updateById(uid, { rol: 'user' })
-//                 }
-//                 user = await UsersController.getById(uid)
-//                 return res.status(200).json({ message: `User ${user.firstName} ${user.lastName} is now ${user.rol}` });
-//             }
-
-//             return res.status(400).json({ error: `Usuario con id ${uid} no encontrado` })
-
-//         } catch (error) {
-//             console.log('Error', error.message)
-//             next(error)
-//         }
-//     }
-// )
 
 router.get('/premium/:uid',
     passport.authenticate('jwt', { session: false }),
-    authorizationMiddleware(['admin']),
     async (req, res, next) => {
         const { uid } = req.params;
 
@@ -54,7 +26,7 @@ router.get('/premium/:uid',
                     // console.log("user", user)
                     let count = 0;
                     const totalTypes = documentTypes.length;
-                    console.log(user.documents);
+
                     user.documents.forEach((document, index) => {
                         for (let i = 0; i < totalTypes; i++) {
                             if (document.documentType.includes(documentTypes[i])) {
@@ -150,6 +122,14 @@ router.delete('/',
     authorizationMiddleware(['admin']),
     async (req, res, next) => {
         try {
+            const users = await UsersController.get();
+
+            let { activeUsers, deletedUsers } = await UsersController.deleteInactiveUser(users);
+
+            return res.status(200).json({
+                activeUsers,
+                deletedUsers
+            })
 
         } catch (error) {
             console.log('Error', error.message);
@@ -158,4 +138,49 @@ router.delete('/',
     }
 )
 
+router.delete('/:uid',
+    passport.authenticate('jwt', { session: false }),
+    authorizationMiddleware(['admin']),
+    async (req, res, next) => {
+        try {
+            const { uid } = req.params;
+
+            const user = await UsersController.getById(uid);
+
+            if (user.error) {
+                return res.status(404).json({ status: 'error', message: 'Usuario no encontrado en la base de datos' })
+            }
+
+            await UsersController.deleteById(user.id);
+            res.status(204).end();
+
+        } catch (error) {
+            console.log("Error", error.message);
+            next(error);
+        }
+    }
+);
+
+router.put('/:uid',
+    passport.authenticate('jwt', { session: false }),
+    authorizationMiddleware(['admin']),
+    async (req, res, next) => {
+        try {
+            const { params: { uid } } = req;
+
+            const user = await UsersController.getById(uid);
+
+            if (user.error) {
+                console.log('entra aqui')
+                return res.status(404).json({ status: 'error', message: 'Usuario no encontrado en la base de datos' })
+            }
+
+            await UsersController.updateById(uid, { rol: 'admin' })
+            return res.status(204).end()
+        } catch (error) {
+            console.log('Error', error.message);
+            next(error);
+        }
+    }
+)
 export default router;

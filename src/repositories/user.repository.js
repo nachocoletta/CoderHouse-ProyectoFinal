@@ -44,15 +44,22 @@ export default class User {
         currentUser = new UserDTO(currentUser);
         // console.log("Current user en getCurrent", currentUser);
 
-        return {
-            id: currentUser.id.toString(),
-            firstName: currentUser.first_name,
-            lastName: currentUser.last_name,
-            email: currentUser.email,
-            rol: currentUser.rol,
-            cartId: currentUser.cartId,
-            documents: currentUser.documents,
-        };
+        return currentUser.rol === 'admin' ?
+            {
+                id: currentUser.id.toString(),
+                firstName: currentUser.first_name,
+                lastName: currentUser.last_name,
+                email: currentUser.email,
+                rol: currentUser.rol,
+            } : {
+                id: currentUser.id.toString(),
+                firstName: currentUser.first_name,
+                lastName: currentUser.last_name,
+                email: currentUser.email,
+                rol: currentUser.rol,
+                cartId: currentUser.cartId,
+                documents: currentUser.documents,
+            }
     }
 
 }

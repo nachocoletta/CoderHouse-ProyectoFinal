@@ -2,6 +2,8 @@
 // import UserDTO from "../dto/user.dto.js";
 import { userRepository } from '../repositories/index.js'
 
+import EmailService from "./email.services.js";
+
 export default class UsersService {
 
     static findAll(filter = {}) {
@@ -41,5 +43,30 @@ export default class UsersService {
 
     static deleteById(uid) {
         return userRepository.deleteById(uid)
+    }
+
+    static async deleteByInactivity(uid) {
+
+        // userRepository.deleteById(uid);
+        const emailService = EmailService.getInstance();
+
+        const user = await UsersService.findById(uid);
+        // console.log("user in deletebyInactivity", user)
+        // sendEmail(to, subject, html, attachments = []) {
+        //     return this.transport.sendMail({
+        //         from: config.mail.user,
+        //         to,
+        //         subject,
+        //         html,
+        //         attachments,
+        //     });
+        await emailService.sendEmail(
+            user.email,
+            'Usuario eliminado por inactividad',
+            `Estimado ${user.firstName} ${user.lastName} su usuario ha sido eliminado de nuestra base de datos por inactividad.
+            Le recordamos que luego de 2 dias sin conectarse es eliminado`
+        )
+
+        await UsersService.deleteById(user.id)
     }
 }

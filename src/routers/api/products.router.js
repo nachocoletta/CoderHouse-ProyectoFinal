@@ -100,7 +100,7 @@ router.post('/',
         // console.log('body', body);
         // console.log('Files:', req.files);
         const { title, description, code, price, stock, category } = req.body;
-        // console.log("req.user en post products", req.user)
+        console.log("req.user en post products", req.user)
         try {
             if (!title || !description || !code || !price || !stock || !category) {
                 // console.log("title", title)
@@ -114,32 +114,28 @@ router.post('/',
                 })
             }
 
-            // const ownerId = req.user.id instanceof mongoose.Types.ObjectId
-            //     ? req.user.id
-            //     : new mongoose.Types.ObjectId(req.user.id);
+            if (req.user.rol !== 'admin') {
+                const ownerId = req.user.id instanceof mongoose.Types.ObjectId
+                    ? req.user.id
+                    : new mongoose.Types.ObjectId(req.user.id);
 
-            // body.owner = ownerId;
-            // console.log("body", body)
+                body.owner = ownerId;
+                // console.log("body", body)
+                const product = await ProductsController.create(
+                    body,
+                    files);
+                // res.redirect(`/products`)
+                return res.status(201).json(product);
+            }
             const product = await ProductsController.create(
                 body,
                 files);
-            // res.redirect(`/products`)
             res.status(201).json(product);
         } catch (error) {
             next(error)
         }
 
     });
-// router.post('/', async (req, res) => {
-//     const { body } = req;
-
-//     try {
-//         const product = await ProductManager.create(body);
-//         res.status(201).json(product);
-//     } catch (error) {
-//         res.status(error.statusCode || 500).json({ message: error.message });
-//     }
-// })
 
 router.put('/:pid',
     passport.authenticate('jwt', { session: false }),
@@ -176,16 +172,19 @@ router.delete('/:pid',
             const uid = new mongoose.Types.ObjectId(req.user.id);
 
             if (req.user.rol === 'premium') {
-                const product = await ProductManager.getById(pid);
+                const product = await ProductsController.getById(pid);
                 // console.log(product.owner);
                 // console.log(uid)
 
                 if (!product.owner.equals(uid)) {
                     return res.status(400).json({ error: `No se puede borrar un producto del cual no se es propietario` })
                 }
+                await ProductsController.deleteById(pid);
+                return res.status(204).end();
             }
             // console.log('pasa por aca')
-            await ProductManager.deleteById(pid);
+            await ProductsController.deleteById(pid);
+
             res.status(204).end();
         } catch (error) {
             console.log(error.message)

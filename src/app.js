@@ -23,13 +23,13 @@ import indexRouter from './routers/api/index.router.js';
 import indexJwtRouter from './routers/api/index.jwt.router.js';
 // import { __dirname } from './helpers/utils.js';
 import productsApiRouter from './routers/api/products.router.js'
-// import productsViewRouter from './routers/views/products.router.js'
 import cartsApiRouter from './routers/api/carts.router.js'
-import products from './routers/views/products.router.js';
-import profile from './routers/views/users.router.js'
-import chatViewRouter from './routers/views/chat.router.js';
 
+import productsViewRouter from './routers/views/products.router.js';
+import profileViewRouter from './routers/views/user.router.js'
+import chatViewRouter from './routers/views/chat.router.js';
 import cartViewRouter from './routers/views/carts.router.js';
+import usersViewRouter from './routers/views/users.router.js'
 
 import sessionsRouter from './routers/api/sessions.router.js';
 import jwtRouter from './routers/api/jwt.router.js'
@@ -101,14 +101,18 @@ app.use(passport.initialize());
 // });
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 // app.use('/', indexJwtRouter)
-app.use('/profile', profile)
 app.use('/api/products', productsApiRouter);
 app.use('/api/carts', cartsApiRouter);
 app.use('/api/logger', logger);
 app.use('/api/users', usersRouter);
-app.use('/products', products);
+
+app.use('/products', productsViewRouter);
+app.use('/profile', profileViewRouter)
 app.use('/chat', chatViewRouter);
 app.use('/cart', cartViewRouter);
+app.use('/users', usersViewRouter);
+
+
 app.use('/', indexRouter);
 app.use('/api', sessionsRouter);
 app.use('/auth', jwtRouter)

@@ -1,0 +1,48 @@
+<article>
+ 
+  <header>
+    <h1>Usuario Admin</h1>
+  </header>
+  <p>Nombre: {{this.user.firstName}}</p>
+  <p>Apellido: {{this.user.lastName}}</p>
+  <p>Correo: {{this.user.email}}</p>
+
+</article>
+
+<h1>Usuarios</h1>
+
+<table id="main" role="grid">
+<tr>
+    <th>ID</th>
+    <th>Nombre</th>
+    <th>Apellido</th>
+    <th>Email</th>
+    <th>Rol</th>
+    <th>Modificar</th>
+    <th>Eliminar</th>
+</tr>
+ {{#each payload}}
+ <tr>
+    <td>{{this._id}}</td>
+    <td>{{this.first_name}}</td>
+    <td>{{this.last_name}}</td>
+    <td>{{this.email}}</td>
+    <td>{{this.rol}}</td>
+    <td>
+        <select id={{this._id}} class="rolUsuario" data-selected-rol="{{this.rol}}">
+             <option value="" selected disabled>Seleccione una opción</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+        </select>
+    </td>
+    <td>
+        <button id={{this._id}} class="usuarios">✅</button>
+    </td>
+ </tr>
+{{/each}}
+</table>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/users.js"></script>
+

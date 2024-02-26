@@ -13,6 +13,7 @@ import { dirname } from 'path';
 import MessageController from './controllers/message.controller.js';
 
 import { verifyToken } from './helpers/utils.js';
+import UsersController from './controllers/users.controller.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -99,7 +100,7 @@ export const init = async (httpServer) => {
                     let carts = await CartController.get()
                     io.emit('listCarts', carts)
                 } else {
-                    req.logger.warning('Product not found')
+                    console.log('Product not found')
                 }
             }
             catch (error) {
@@ -120,6 +121,26 @@ export const init = async (httpServer) => {
             io.emit('listCarts', carts)
         })
 
+        socketClient.on('deleteUser', async (uid) => {
+            await UsersController.deleteById(uid);
+            let users = await UsersController.get();
+            io.emit('listUsers', users)
+        })
+
+        let users = await UsersController.get();
+        socketClient.emit('listUsers', users)
+
+
+        socketClient.on('cambiarRol', async ({ usersId, nuevoRol }) => {
+            try {
+                const user = await UsersController.getById(usersId);
+
+                await UsersController.updateById(user.id, { rol: nuevoRol })
+            } catch (error) {
+                console.log("Error", error.message)
+            }
+
+        })
         socketClient.on('disconnect', () => {
             console.log(`Se ha desconectado el cliente con id ${socketClient.id}`)
         })

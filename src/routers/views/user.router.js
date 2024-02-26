@@ -3,38 +3,35 @@ import { Router } from "express";
 // import config from "../../config.js";
 import passport from "passport";
 import UsersController from "../../controllers/users.controller.js";
-import { authorizationMiddleware } from "../../helpers/utils.js";
-
 
 const router = Router();
 
 const buildResponse = (data, req) => {
 
-    console.log("data", data)
+    // console.log("req", req);
+
     return {
         title: "Profile",
         status: "success",
         user: req.user,
-        payload: data.map(user => user.toJSON()),
+        // payload: data.docs.map(product => product.toJSON()),
     };
+    // const category = data.docs.length > 0 ? data.docs[0].category : undefined;
+
 };
 router.get('/',
     passport.authenticate('jwt', { session: false }),
-    authorizationMiddleware(['admin']),
     async (req, res) => {
         try {
+            // console.log("req.user", req.user)
             const user = await UsersController.getByMail(req.user.email)
-            const users = await UsersController.get();
-            // console.log('users', users)
-            const response = buildResponse(users, req)
-            res.render('users', response)
+            // console.log("user", user)
+            const response = buildResponse(user, req)
+            // console.log("response", response)
+            res.render('profile', response)
         } catch (error) {
             res.status(500).json({ error: error.message })
         }
     }
-);
-
-
-
-
+)
 export default router;

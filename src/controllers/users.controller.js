@@ -9,7 +9,6 @@ export default class UsersController {
     }
 
     static async create(data) {
-        // console.log("data", data)
         const user = await UsersService.create(data)
         return user;
     }
@@ -57,15 +56,36 @@ export default class UsersController {
     }
 
     static async deleteById(uid) {
-        await UsersController.getById(uid)
+        let user = await UsersController.getById(uid)
         console.log("Eliminando el usuario")
         await UsersService.deleteById(uid)
-        console.log("Usuario eliminado correctamente")
+        console.log(`Usuario con id ${user.id} eliminado correctamente`)
     }
 
     static async updateLastConnection(uid, last_connection) {
         // let user = await UsersController.getById(uid);
 
         await UsersService.updateById(uid, last_connection)
+    }
+
+    static async deleteInactiveUser(users) {
+        let activeUsers = [];
+        let deletedUsers = [];
+        const fechaActual = new Date();
+        const fechaActualMenosDosDias = new Date(fechaActual)
+        fechaActualMenosDosDias.setDate(fechaActualMenosDosDias.getDate() - 2);
+        for (let i = 0; i < users.length; i++) {
+            // console.log("user", users[i]._id.toString());
+            if (fechaActualMenosDosDias >= users[i].last_connection && users[i].rol !== 'admin') {
+                // console.log('Mas de dos dias - borrar', users[i].last_connection)
+                deletedUsers.push(users[i]);
+                await UsersService.deleteByInactivity(users[i]._id.toString());
+
+            } else {
+                // console.log('Menos de dos dias - no borrar', users[i].last_connection)
+                activeUsers.push(users[i])
+            }
+        }
+        return { activeUsers, deletedUsers };
     }
 }

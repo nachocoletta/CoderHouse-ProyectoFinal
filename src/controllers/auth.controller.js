@@ -1,3 +1,4 @@
+import UserDTO from "../dto/user.dto.js";
 import { createHash, isValidPassword, tokenGenerator } from "../helpers/utils.js";
 import AuthServices from "../services/auth.services.js";
 import CartsService from "../services/carts.services.js";
@@ -27,11 +28,11 @@ export default class AuthController {
             rol,
             cartId: cart._id
         })
-
+        const newUser = new UserDTO(user)
         // console.log(user)
-        const token = tokenGenerator(user)
+        // const token = tokenGenerator(user)
         // console.log("token", token)
-        return token;
+        return newUser;
     }
     static async login(data) {
 

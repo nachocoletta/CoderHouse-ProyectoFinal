@@ -66,10 +66,8 @@ const buildPageLink = (req, page, limit, sort, category) => {
 //     res.status(200).json(products);
 // })
 router.get('/',
-    // privateRouter,
     passport.authenticate('jwt', { session: false }),
     async (req, res) => {
-        // console.log('entra');
         try {
             const { page = 1, limit = 10, category, code, price, title, sort, stock } = req.query;
             const options = {
@@ -115,9 +113,5 @@ router.get('/',
         }
         // res.status(200).json(result);
     })
-// router.get('/', async (req, res) => {
-//     let products = await ProductManager.get();
-//     console.log("products", products);
-//     res.render('productsBis', { products: products.map(p => p.toJSON()) })
-// })
+
 export default router;

@@ -1,3 +1,7 @@
+
+// SE REEMPLAZO ESTE ARCHIVO POR 
+// jwtRouter.router.js
+
 import { Router } from 'express';
 import UsersService from '../../services/users.services';
 import UsersController from '../../controllers/users.controller';
