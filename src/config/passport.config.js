@@ -5,7 +5,7 @@ import { createHash, isValidPassword } from '../helpers/utils.js';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import UserManager from '../dao/UserManager.js';
 import UsersController from '../controllers/users.controller.js';
-// import 'dotenv/config';
+import 'dotenv/config';
 
 import config from '../config.js';
 
