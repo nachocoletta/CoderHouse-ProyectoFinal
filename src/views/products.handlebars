@@ -1,0 +1,200 @@
+<article>
+  <header>
+    <h1>Bienvenido <strong>{{this.user.first_name}} {{this.user.last_name}}</strong></h1>
+  </header>
+  <p>Nombre: {{this.user.first_name}}</p>
+  <p>Apellido: {{this.user.last_name}}</p>
+  <p>Correo: {{this.user.email}}</p>
+  <p>Tipo de Usuario: <strong>{{this.user.rol}}</strong> </p>
+  
+  </form>
+  <footer>
+    <a href="/api/sessions/logout" role="button">Logout</a>
+  </footer>
+</article>
+
+<h1>Productos Paginados</h1>
+<table id="main" role="grid">
+<tr>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Code</th>
+    <th>Price</th>
+    <th>Stock</th>
+    <th>Category</th>
+    <th>Quantity</th>
+    <th>ADD</th>
+    <th>IMAGES</th>
+  </tr>
+  {{#each payload}}
+  <tr>
+    <td>{{this._id}}</td>
+    <td>{{this.title}}</td>
+    <td>{{this.description}}</td>
+    <td>{{this.code}}</td>
+    <td>{{this.price}}</td>
+    <td>{{this.stock}}</td>
+    <td>{{this.category}}</td>
+    <td><input type="text" id={{this._id}} style="width: 80px;" required></td>
+    <td><button id={{this._id}} class="boton">ADD</button></td>
+    <td>
+  {{#if this.thumbnails}}
+    {{#each this.thumbnails}}
+      <img src="./productImages/{{this}}" alt="no-image"/>
+    {{/each}}
+  {{else}}
+    <!-- Handle the case where thumbnails are undefined or empty -->
+    No Image
+  {{/if}}
+</td>
+  </tr>
+  {{/each}}
+</table>
+
+
+<p>Página actual: {{page}}</p>
+
+<a href="{{prevLink}}" role="button" {{#unless hasPrevPage}}disabled{{/unless}} >Anterior</a>
+<a href="{{nextLink}}" role="button" {{#unless hasNextPage}}disabled{{/unless}} >Siguiente</a>
+
+<div id="carts">
+</div>
+  
+<div>
+  <h1>Products</h1>
+  
+  
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <!-- Columna 1 -->
+        <div style="flex: 1;">
+          <form action="/api/products" method="post" enctype="multipart/form-data">
+            <h1>Create Product</h1>
+            <label for="title">Title:</label>
+            <input type="text"  name="title" required>
+
+            <label for="description">Description:</label>
+            <input type="text"  name="description">
+
+            <label for="code">Code:</label>
+            <input type="text"  name="code" required>
+
+            <label for="price">Price:</label>
+            <input type="number"  name="price" required>
+
+            <label for="stock">Stock:</label>
+            <input type="number"  name="stock" required>
+
+            <label for="category">Category:</label>
+            <input type="text"  name="category" required>
+            
+            
+            <input type="file" name="thumbnails" multiple>
+            <input type="submit">Create</input>
+
+
+          </form>
+        </div>
+        <!-- Columna 2 -->
+        <div style="flex: 1;">
+          <form id="form-delete-product">
+            <h1>Delete Product</h1>
+            <label for="input-id-product">ID:</label>
+            <input type="text" id="input-id-product" name="id" required>
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+        <!-- Columna 3 -->
+        <div style="flex: 1;">
+          <form id="form-update-product">
+            <h1>Update Product</h1>
+            <label for="input-id-product-update">ID:</label>
+            <input type="text" id="input-id-product-update" name="id" required>
+            
+            <label for="input-title-update">Title:</label>
+            <input type="text" id="input-title-update" name="title-update" required>
+
+            <label for="input-description-update">Description:</label>
+            <input type="text" id="input-description-update" name="description-update">
+
+            <label for="input-code-update">Code:</label>
+            <input type="text" id="input-code-update" name="code-update" required>
+
+            <label for="input-price-update">Price:</label>
+            <input type="text" id="input-price-update" name="price-update" required>
+
+            <label for="input-stock-update">Stock:</label>
+            <input type="text" id="input-stock-update" name="stock-update" required>
+
+            <label for="input-category-update">Category:</label>
+            <input type="text" id="input-category-update" name="category-update" required>
+            <button type="submit">Update</button>
+          </form>
+        </div>
+    </div>
+</div>
+
+
+<h1>Products in Real Time</h1>
+<div id="log-products-in-real-time">
+</div>
+
+<h1>Tickets</h1>
+<div style="display: flex; flex-direction: row; justify-content: space-between;">
+<div style="flex: 1;"><p>Hola</p></div>
+<div style="flex: 1;"><p>Amego</p></div>
+    
+</div>
+
+<h1>Carts</h1>
+<div style="display: flex; flex-direction: row; justify-content: space-between;">
+  {{!-- <div style="flex: 1;">
+    <form id="create-cart">
+      <h2>Create Cart</h2>
+      <button type="submit">Create Cart</button>
+    </form>
+  </div> --}}
+  <div style="flex: 1;">
+ {{!-- <form id="add-product-to-cart" action="/api/carts/{{cartId}}" method="post">
+  <h2>Add Product to cart</h2>
+  <label for="cart-input-id-product-to-cart">Cart ID:</label>
+  <input type="text" id="cart-input-id-product-to-cart" name="cartId" value="{{cartId}}" required>
+
+  <label for="input-id-product-to-cart">Product ID:</label>
+  <input type="text" id="input-id-product-to-cart" name="id-product-to-cart" required>
+
+  <label for="input-quantity-product-in-cart">Quantity:</label>
+  <input type="text" id="input-quantity-product-in-cart" name="quantity-product-in-cart">
+  <button type="submit">Add</button>
+</form> --}}
+
+    <form id="add-product-to-cart">
+      <h2>Add Product to cart</h2>
+      {{!-- <label for="cart-input-id-product-to-cart">Cart ID:</label>
+      <input type="text" id="cart-input-id-product-to-cart" name="cart-input-id-product-to-cart" required> --}}
+
+      <label for="input-id-product-to-cart">Product ID:</label>
+      <input type="text" id="input-id-product-to-cart" name="id-product-to-cart" required>
+
+      <label for="input-quantity-product-in-cart">Quantity:</label>
+      <input type="text" id="input-quantity-product-in-cart" name="quantity-product-in-cart">
+      <button type="submit">Add</button>
+     </form>
+  </div>
+  <div style="flex: 1;">
+    <form id="remove-cart">
+      <h2>Remove cart</h2>
+      <label for="cart-input-id-product-to-remove">Cart ID:</label>
+      <input type="text" id="cart-input-id-product-to-remove" name="cart-input-product-to-remove">
+      <button type="submit">Remove Cart</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
+

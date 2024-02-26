@@ -1,0 +1,53 @@
+<article>
+  <header>
+    <h1>Private Zone</h1>
+  </header>
+  <p>Nombre: {{this.user.firstName}}</p>
+  <p>Apellido: {{this.user.lastName}}</p>
+  <p>Correo: {{this.user.email}}</p>
+  
+ <!-- Formulario para Identificación -->
+<!-- Formulario para Identificación -->
+<!-- Formulario para Identificación -->
+<form action="/api/users/{{user.id}}/documents" method="post" enctype="multipart/form-data">
+  <label for="identificacion">Identificacion:</label>
+  <input type="file" name="documentsID" multiple>
+  <input type="submit" value="Upload">
+</form>
+
+<!-- Formulario para Domicilio -->
+<form action="/api/users/{{user.id}}/documents" method="post" enctype="multipart/form-data">
+  <label for="domicilio">domicilio:</label>
+  <input type="file" name="documentsID" multiple>
+  <input type="submit" value="Upload">
+</form>
+{{!-- <form action="/api/users/{{user.id}}/documents" method="post" enctype="multipart/form-data">
+  <label for="domicilio">domicilio:</label>
+  <input type="file" name="documentsDomicilio" multiple>
+  <input type="submit" value="Upload">
+</form> --}}
+
+<!-- Formulario para Estado de cuenta -->
+<form action="/api/users/{{user.id}}/documents" method="post" enctype="multipart/form-data">
+  <label for="estadoDeCuenta">Estado de cuenta:</label>
+  <input type="file" name="documentsEstadoCuenta" multiple>
+  <input type="submit" value="Upload">
+</form>
+
+<!-- Formulario para Avatar -->
+<form action="/api/users/{{user.id}}/documents" method="post" enctype="multipart/form-data">
+  <label for="avatar">Avatar:</label>
+  <input type="file" name="avatar" multiple>
+  <input type="submit" value="Upload">
+</form>
+
+
+
+  {{!-- <footer>
+    <a href="/api/sessions/logout" role="button">Logout</a>
+
+  </footer> --}}
+</article>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

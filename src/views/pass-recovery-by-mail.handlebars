@@ -1,0 +1,12 @@
+<article>
+  <form action="/auth/password-restore/{{email}}" method="post">
+    <header>
+      <h1>Recuperar contraseña para {{email}}</h1>
+    </header>
+    <input type="password" name="pass" placeholder="Nueva clave" required />
+    <input type="password" name="repeated_pass" placeholder="Reingrese Clave" required />
+    <footer>
+      <input type="submit" value="Enviar">
+    </footer>
+  </form>
+</article>

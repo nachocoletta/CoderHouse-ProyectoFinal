@@ -1,0 +1,15 @@
+<article>
+  <form action="/auth/login" method="post">
+    <header>
+      <h1>Login</h1>
+    </header>
+    <input type="email" name="email" placeholder="Correo" required />
+    <input type="password" name="password" placeholder="Contraseña" required />
+    <a href="/password-recovery">Recupere su clave</a> o <a href="/register">Registrese</a> 
+    o <a href="/pass-recovery">Pass Recovery Clase 37</a>
+    <footer>
+      <input type="submit" value="Enviar">
+      <a href="/api/sessions/github" role="button">Ingresar con Github</a>
+    </footer>
+  </form>
+</article>

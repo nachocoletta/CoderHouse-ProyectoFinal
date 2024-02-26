@@ -1,0 +1,96 @@
+<h1>Productos</h1>
+
+<article>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <!-- Columna 1 -->
+        <div style="flex: 1;">
+          <form id="form-add-product">
+            <h1>Create Product</h1>
+            <label for="input-title">Title:</label>
+            <input type="text" id="input-title" name="title" required>
+
+            <label for="input-description">Description:</label>
+            <input type="text" id="input-description" name="description">
+
+            <label for="input-code">Code:</label>
+            <input type="text" id="input-code" name="code" required>
+
+            <label for="input-price">Price:</label>
+            <input type="text" id="input-price" name="price" required>
+
+            <label for="input-stock">Stock:</label>
+            <input type="text" id="input-stock" name="stock" required>
+
+            <label for="input-category">Category:</label>
+            <input type="text" id="input-category" name="category" required>
+            <button type="submit">Create</button>
+          </form>
+        </div>
+        <!-- Columna 2 -->
+        <div style="flex: 1;">
+          <form id="form-delete-product">
+            <h1>Delete Product</h1>
+            <label for="input-id-product">ID:</label>
+            <input type="text" id="input-id-product" name="id" required>
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+        <!-- Columna 3 -->
+        <div style="flex: 1;">
+          <form id="form-update-product">
+            <h1>Update Product</h1>
+            <label for="input-id-product-update">ID:</label>
+            <input type="text" id="input-id-product-update" name="id" required>
+            
+            <label for="input-title-update">Title:</label>
+            <input type="text" id="input-title-update" name="title-update" required>
+
+            <label for="input-description-update">Description:</label>
+            <input type="text" id="input-description-update" name="description-update">
+
+            <label for="input-code-update">Code:</label>
+            <input type="text" id="input-code-update" name="code-update" required>
+
+            <label for="input-price-update">Price:</label>
+            <input type="text" id="input-price-update" name="price-update" required>
+
+            <label for="input-stock-update">Stock:</label>
+            <input type="text" id="input-stock-update" name="stock-update" required>
+
+            <label for="input-category-update">Category:</label>
+            <input type="text" id="input-category-update" name="category-update" required>
+            <button type="submit">Update</button>
+          </form>
+        </div>
+    </div>
+</article>
+
+<article>
+    <h1>Products</h1>
+    <table id="main">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Code</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Category</th>
+        </tr>
+        {{#each products}}
+        <tr>
+            <td>{{this._id}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.code}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.stock}}</td>
+            <td>{{this.category}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</article>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
