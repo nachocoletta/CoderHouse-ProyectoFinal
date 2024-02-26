@@ -14,9 +14,9 @@ const options = {
     passReqToCallback: true,
 }
 const githubOptions = {
-    clientID: config.github.clientGithub,
-    clientSecret: config.github.secretGithub,
-    callbackURL: config.github.urlCallbackGithub
+    clientID: process.env.CLIENT_GITHUB,
+    clientSecret: process.env.SECRET_GITHUB,
+    callbackURL: process.env.URL_CALLBACK_GITHUB
 }
 
 const JWTOptions = {
