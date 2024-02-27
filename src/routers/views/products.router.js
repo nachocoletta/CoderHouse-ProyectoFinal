@@ -6,6 +6,7 @@ import ProductController from '../../controllers/products.controller.js'
 // import { ProductManager } from '../../dao/ProductManager.js';
 import config from "../../config.js";
 import passport from "passport";
+import 'dotenv/config';
 
 const router = Router();
 const privateRouter = (req, res, next) => {
@@ -56,7 +57,7 @@ const buildResponse = (data, req) => {
 
 const buildPageLink = (req, page, limit, sort, category) => {
     // console.log("category", category);
-    const baseUrl = `http://localhost:${config.port}/products?limit=${limit}&page=${page}`;
+    const baseUrl = `${process.env.HOST}:${process.env.PORT}/products?limit=${limit}&page=${page}`;
     const categoryParam = category ? `&category=${category}` : '';
     const sortParam = sort ? `&sort=${sort}` : '';
     return `${baseUrl}${categoryParam}${sortParam}`;

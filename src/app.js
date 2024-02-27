@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import MongoStore from 'connect-mongo';
-// import 'dotenv/config';
+import 'dotenv/config';
 import cookieParser from 'cookie-parser'
 
 import swaggerJsDoc from 'swagger-jsdoc';
