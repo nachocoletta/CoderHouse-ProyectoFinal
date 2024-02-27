@@ -28,7 +28,7 @@ export default class EmailService {
         return this.sendEmail(
             email,
             `Reseteo de clave`,
-            `Este es el link para restaurar la clave ${process.env.HOST}:${process.env.PORT}/auth/pass-recovery-by-mail/${token}`
+            `Este es el link para restaurar la clave ${process.env.HOST}/auth/pass-recovery-by-mail/${token}`
         )
     }
 
