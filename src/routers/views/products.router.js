@@ -57,7 +57,7 @@ const buildResponse = (data, req) => {
 
 const buildPageLink = (req, page, limit, sort, category) => {
     // console.log("category", category);
-    const baseUrl = `${process.env.HOST}:${process.env.PORT}/products?limit=${limit}&page=${page}`;
+    const baseUrl = `${process.env.HOST}/products?limit=${limit}&page=${page}`;
     const categoryParam = category ? `&category=${category}` : '';
     const sortParam = sort ? `&sort=${sort}` : '';
     return `${baseUrl}${categoryParam}${sortParam}`;

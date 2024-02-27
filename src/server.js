@@ -14,7 +14,7 @@ const HOST = process.env.HOST || "http://localhost"
 
 const httpServer = app.listen(PORT, () => {
   // req.logger.info(`Server running on http://localhost:${PORT} 🚀`)
-  console.log(`Server running on ${HOST}/${PORT} 🚀`);
+  console.log(`Server running on ${HOST}:${PORT} 🚀`);
 });
 
 await init(httpServer);
