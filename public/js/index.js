@@ -41,7 +41,7 @@
 
             // console.log("cantidad", cantidad)
             try {
-                const response = await fetch('http://localhost:8080/auth/current')
+                const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/current')
 
                 // console.log("response", response)
                 if (response.ok) {
@@ -250,7 +250,7 @@
             seeCart.addEventListener('click', () => {
                 const cartId = cart._id;
                 // Redireccionar al usuario a la URL deseada
-                window.location.href = `http://localhost:8080/cart/${cartId}`;
+                window.location.href = `https://coderhouse-proyectofinal-production.up.railway.app/cart/${cartId}`;
             });
             cartElement.appendChild(seeCart);
             cartElement.appendChild(buyButton);
@@ -272,7 +272,7 @@
         // }
 
         try {
-            const response = await fetch('http://localhost:8080/auth/cart')
+            const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/cart')
 
             if (response.ok) {
                 const data = await response.json();
