@@ -1,0 +1,233 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos paginados, 10 por página
+      tags:
+        - Products
+      responses:
+        200: 
+          description: Productos obtenidos
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        500:
+          description: Error interno del servidor
+    post:
+      summary: Crea un producto  # Cambié "Crea una producto" a "Crea un producto"
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/createProduct'
+      responses:
+        200:
+          description: Producto creado
+        400:
+          description: Error en los datos enviados
+        500:
+          description: Error interno del servidor
+
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto por su identificado
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      # requestBody:
+      #   required: true
+      #   content:
+      #     application/json:
+      #       schema:
+      #         $ref: '#/components/requestBodies/createProduct'
+      responses:
+        200:
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        404:
+          description: Producto no encontrado
+        500:
+          description: Error interno del servidor
+    put:
+      summary: Actualización de un producto por su ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+      responses:
+        204:
+          description: Producto modificado
+        400:
+          description: No se puede modificar un producto del cual no se es propietario o si no es admin.
+        500:
+          description: Error interno del servidor
+    delete:
+      summary: Eliminacion de un producto por su ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        204:
+          description: Producto eliminado
+        400:
+          description: No se puede eliminar un producto del cual no se es propietario o si no es admin.
+        500:
+          description: Error interno del servidor  
+
+  /api/products/mockingproducts:
+    post:
+      summary: Crea mocking de productos random, solo admin pueden crearlos
+      tags:
+        - Products
+      responses:
+        200:
+          description: Productos creados
+        403:
+          description: No posee permisos de administrador 
+        500:
+          description: Error interno del servidor
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del producto
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        code:
+          type: string
+          description: Código único de un producto
+        price:
+          type: integer
+          description: Precio del producto
+        status:
+          type: string
+          description: En caso de ser true el producto se encuentra activo
+        stock:
+          type: string
+          description: Stock del producto al momento de realizar la consulta
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+        thumbnails:
+          type: string
+          description: Link a las imágenes
+        owner:
+          type: string
+          description: Id del dueño del producto, si no posee por defecto se asigna un admin con id 6591bd964c892e7ada705733
+      example:
+        _id: 6597fb34efbf5c1124f14073
+        title: Chicken
+        description: Carbonite web goalkeeper gloves are ergonomically designed to give easy fit
+        code: d5b14d3f-eb86-4fea-9122-ab6603c67998
+        price: 50
+        status: true
+        stock: 235
+        category: Food
+        thumbnails: hola
+        owner: 6591bdb14c892e7ada705738
+
+  requestBodies:
+    createProduct:
+      type: object  # Eliminé el espacio antes de "properties"
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        code:
+          type: string
+          description: Código único de un producto
+        price:
+          type: integer
+          description: Precio del producto
+        status:
+          type: boolean
+          description: En caso de ser true el producto se encuentra activo
+        stock:
+          type: integer
+          description: Stock del producto al momento de realizar la consulta
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+      example:
+        title: Producto de prueba
+        description: Descripcion del producto
+        code: code123
+        price: 200
+        status: true
+        stock: 430
+        category: categoria 1
+    updateProduct:
+      type: object  # Eliminé el espacio antes de "properties"
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        code:
+          type: string
+          description: Código único de un producto
+        price:
+          type: integer
+          description: Precio del producto
+        status:
+          type: boolean
+          description: En caso de ser true el producto se encuentra activo
+        stock:
+          type: integer
+          description: Stock del producto al momento de realizar la consulta
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+      example:
+        title: Producto de prueba
+        description: Descripcion del producto
+        code: code123
+        price: 200
+        status: true
+        stock: 430
+        category: categoria 1
+
+ 
