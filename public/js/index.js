@@ -30,8 +30,8 @@
             try {
                 // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/current');
 
-                // const response = await fetch(`${URL_INTERNET}/auth/current`);
-                const response = await fetch(`${URL_LOCAL}/auth/current`);
+                const response = await fetch(`${URL_INTERNET}/auth/current`);
+                // const response = await fetch(`${URL_LOCAL}/auth/current`);
                 // console.log("response", response)
                 if (response.ok) {
                     data = await response.json();
@@ -275,8 +275,8 @@
 
         try {
             // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/cart')
-            const response = await fetch(`${URL_LOCAL}/auth/cart`)
-            // const response = await fetch(`${URL_INTERNET}/auth/cart`)
+            // const response = await fetch(`${URL_LOCAL}/auth/cart`)
+            const response = await fetch(`${URL_INTERNET}/auth/cart`)
 
             if (response.ok) {
                 const data = await response.json();
@@ -332,8 +332,8 @@
     if (botonAdminUsuarios) {
         botonAdminUsuarios.addEventListener("click", (event) => {
             event.preventDefault();
-            window.location.href = `${URL_LOCAL}/users`;
-            // window.location.href = `${URL_INTERNET}/users`;
+            // window.location.href = `${URL_LOCAL}/users`;
+            window.location.href = `${URL_INTERNET}/users`;
         })
     }
 
@@ -341,8 +341,8 @@
     if (botonComprarCarrito) {
         botonComprarCarrito.addEventListener("click", (event) => {
             event.preventDefault();
-            window.location.href = `${URL_LOCAL}/cart/${botonComprarCarrito.value}`;
-            // window.location.href = `${URL_INTERNET}/cart/${botonComprarCarrito.value}`;
+            // window.location.href = `${URL_LOCAL}/cart/${botonComprarCarrito.value}`;
+            window.location.href = `${URL_INTERNET}/cart/${botonComprarCarrito.value}`;
         })
     }
 
