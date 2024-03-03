@@ -1,6 +1,7 @@
 // import UserDao from "../dao/user.dao.js";
 // import UserDTO from "../dto/user.dto.js";
 import { userRepository } from '../repositories/index.js'
+import CartsService from './carts.services.js';
 
 import EmailService from "./email.services.js";
 
@@ -67,6 +68,8 @@ export default class UsersService {
             Le recordamos que luego de 2 dias sin conectarse es eliminado`
         )
 
-        await UsersService.deleteById(user.id)
+        await CartsService.deleteById(user.cartId);
+
+        await UsersService.deleteById(user.id);
     }
 }

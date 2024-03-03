@@ -127,6 +127,7 @@ export const init = async (httpServer) => {
             io.emit('listUsers', users)
         })
 
+
         let users = await UsersController.get();
         socketClient.emit('listUsers', users)
 

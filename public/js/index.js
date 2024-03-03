@@ -1,24 +1,11 @@
 (function () {
     // let username;
 
+    const URL_LOCAL = `http://localhost:8080`
+    const URL_INTERNET = `https://coderhouse-proyectofinal-production.up.railway.app`
 
     const socket = io();
 
-
-    // const socket = io('http://localhost:8080', {
-    //     transportOptions: {
-    //         polling: {
-    //             extraHeaders: {
-    //                 Authorization: `Bearer ${access_token}`
-    //             }
-    //         }
-    //     }
-    // });
-
-
-
-
-    // console.log("socket", socket)
     const buttonsAddProductToCart = document.getElementsByClassName("boton")
     const arrayOfButtons = Array.from(buttonsAddProductToCart)
     arrayOfButtons.forEach(element => {
@@ -29,7 +16,7 @@
             // let valor = document.getElementById(`${element.id}`).value
             // alert(valor)
             let product = {};
-            let cantidad = document.getElementById(`${element.id}`).value
+            let cantidad = document.getElementById(`${element.id}`).value || 1;
             let row = element.closest('tr');
 
             // Accede al elemento de la columna que contiene el stock
@@ -41,8 +28,10 @@
 
             // console.log("cantidad", cantidad)
             try {
-                const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/current')
+                // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/current');
 
+                // const response = await fetch(`${URL_INTERNET}/auth/current`);
+                const response = await fetch(`${URL_LOCAL}/auth/current`);
                 // console.log("response", response)
                 if (response.ok) {
                     data = await response.json();
@@ -73,10 +62,12 @@
                     alert("Stock insuficiente - Producto agregado al carrito igualmente")
                 }
                 socket.emit('addProductToCart', product);
-                document.getElementById(`${element.id}`).value = ""
+                document.getElementById(`${element.id}`).value = "";
             } else {
                 alert('Admin no puede agregar productos al carrito')
             }
+            // window.location.href = `http://localhost:8080/products`;
+            // location.reload();
         })
     }
 
@@ -154,40 +145,43 @@
         const container = document.getElementById('log-products-in-real-time')
 
         // Limpiar el contenido previo
-        container.innerHTML = "";
+        if (container) {
 
-        // Crear la tabla
-        const table = document.createElement('table');
-        table.classList.add('product-table');
+            container.innerHTML = "";
 
-        // Crear la fila de encabezados
-        const headerRow = document.createElement('tr');
-        const headers = ['ID', 'Title', 'Description', 'Code', 'Price', 'Stock', 'Category'];
+            // Crear la tabla
+            const table = document.createElement('table');
+            table.classList.add('product-table');
 
-        headers.forEach((header) => {
-            const th = document.createElement('th');
-            th.textContent = header;
-            headerRow.appendChild(th);
-        });
+            // Crear la fila de encabezados
+            const headerRow = document.createElement('tr');
+            const headers = ['ID', 'Title', 'Description', 'Code', 'Price', 'Stock', 'Category'];
 
-        table.appendChild(headerRow);
-
-        // Agregar filas de productos
-        products.forEach((prod) => {
-            const row = document.createElement('tr');
-            const cells = [prod._id, prod.title, prod.description, prod.code, `$${prod.price}`, prod.stock, prod.category];
-
-            cells.forEach((cell) => {
-                const td = document.createElement('td');
-                td.textContent = cell;
-                row.appendChild(td);
+            headers.forEach((header) => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
             });
 
-            table.appendChild(row);
-        });
+            table.appendChild(headerRow);
 
-        // Agregar la tabla al contenedor
-        container.appendChild(table);
+            // Agregar filas de productos
+            products.forEach((prod) => {
+                const row = document.createElement('tr');
+                const cells = [prod._id, prod.title, prod.description, prod.code, `$${prod.price}`, prod.stock, prod.category];
+
+                cells.forEach((cell) => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    row.appendChild(td);
+                });
+
+                table.appendChild(row);
+            });
+
+            // Agregar la tabla al contenedor
+            container.appendChild(table);
+        }
     });
 
     // socket.on('listProducts', (products) => {
@@ -217,49 +211,57 @@
 
     socket.on('listCarts', (carts) => {
         // console.log('entra');
-        const container = document.getElementById('carts');
-        container.innerHTML = "";
+        const container = document.getElementById('cart');
 
-        carts.forEach((cart) => {
-            const cartElement = document.createElement('article');
-            cartElement.innerHTML = `<header><strong>ID Cart:</strong> ${cart._id}</header>
-            <strong>Products:</strong>`;
+        if (container) {
 
-            cart.products?.forEach((prod) => {
-                const productElement = document.createElement('div');
-                productElement.innerHTML = `<strong>productId:</strong> ${prod?.productId?._id}
-                <strong>title:</strong> ${prod?.productId?.title} <strong>price:</strong> $${prod.productId.price} <strong>stock:</strong> ${prod?.productId?.stock} <strong>category:</strong> ${prod.productId.category} 
-                <strong>code:</strong> ${prod?.productId?.code} <strong>quantity:</strong> ${prod.quantity}`;
+            container.innerHTML = "";
 
-                cartElement.appendChild(productElement);
+            carts.forEach((cart) => {
+                const cartElement = document.createElement('article');
+                cartElement.innerHTML = `<header><strong>ID Cart:</strong> ${cart._id}</header>
+                <strong>Products:</strong>`;
+
+                cart.products?.forEach((prod) => {
+                    const productElement = document.createElement('div');
+                    productElement.innerHTML = `<strong>productId:</strong> ${prod?.productId?._id}
+                    <strong>title:</strong> ${prod?.productId?.title} <strong>price:</strong> $${prod.productId.price} <strong>stock:</strong> ${prod?.productId?.stock} <strong>category:</strong> ${prod.productId.category} 
+                    <strong>code:</strong> ${prod?.productId?.code} <strong>quantity:</strong> ${prod.quantity}`;
+
+                    cartElement.appendChild(productElement);
+                });
+
+                const buyButton = document.createElement('button');
+                buyButton.innerText = 'Comprar';
+                buyButton.addEventListener('click', () => {
+                    // Lógica para procesar la compra del carrito
+                    // Puedes llamar a una función o emitir un evento al servidor aquí
+                    confirm('Desea finalizar la compra?')
+                    socket.emit('cartPurchase', cart._id)
+                    alert("Ticket generado, en el cart quedaron los productos sin stock suficente")
+                    console.log(`Comprar carrito ${cart._id}`);
+                });
+
+                const seeCart = document.createElement('button');
+                seeCart.innerText = 'Ver Carrito';
+
+                seeCart.addEventListener('click', () => {
+                    const cartId = cart._id;
+                    // Redireccionar al usuario a la URL deseada
+                    // window.location.href = `https://coderhouse-proyectofinal-production.up.railway.app/cart/${cartId}`;
+
+                    window.location.href = `${URL_LOCAL}/cart/${cartId}`;
+                    // window.location.href = `${URL_INTERNET}/cart/${cartId}`;
+                });
+                cartElement.appendChild(seeCart);
+                cartElement.appendChild(buyButton);
+                const hr = document.createElement('hr');
+                container.appendChild(cartElement);
+                container.appendChild(hr);
             });
 
-            const buyButton = document.createElement('button');
-            buyButton.innerText = 'Comprar';
-            buyButton.addEventListener('click', () => {
-                // Lógica para procesar la compra del carrito
-                // Puedes llamar a una función o emitir un evento al servidor aquí
-                socket.emit('cartPurchase', cart._id)
-                alert("Ticket generado, en el cart quedaron los productos sin stock suficente")
-                console.log(`Comprar carrito ${cart._id}`);
-            });
-
-            const seeCart = document.createElement('button');
-            seeCart.innerText = 'Ver Carrito';
-
-            seeCart.addEventListener('click', () => {
-                const cartId = cart._id;
-                // Redireccionar al usuario a la URL deseada
-                window.location.href = `https://coderhouse-proyectofinal-production.up.railway.app/cart/${cartId}`;
-            });
-            cartElement.appendChild(seeCart);
-            cartElement.appendChild(buyButton);
-            const hr = document.createElement('hr');
-            container.appendChild(cartElement);
-            container.appendChild(hr);
-        });
-
-        container.appendChild(document.createElement('hr'));
+            container.appendChild(document.createElement('hr'));
+        }
     });
 
     formAddProductToCart?.addEventListener('submit', async (event) => {
@@ -272,7 +274,9 @@
         // }
 
         try {
-            const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/cart')
+            // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/cart')
+            const response = await fetch(`${URL_LOCAL}/auth/cart`)
+            // const response = await fetch(`${URL_INTERNET}/auth/cart`)
 
             if (response.ok) {
                 const data = await response.json();
@@ -282,7 +286,7 @@
                     _id: document.getElementById('input-id-product-to-cart').value,
                     quantity: document.getElementById('input-quantity-product-in-cart').value
                 }
-                console.log('product', product)
+                // console.log('product', product)
 
                 socket.emit('addProductToCart', product);
 
@@ -322,8 +326,35 @@
         socket.emit('deleteCart', cartId);
         document.getElementById('cart-input-id-product-to-remove').value = ''
     }))
+    const botonAdminUsuarios = document.getElementById("usuarios");
+    const botonComprarCarrito = document.getElementById("btnComprarCarrito");
+
+    if (botonAdminUsuarios) {
+        botonAdminUsuarios.addEventListener("click", (event) => {
+            event.preventDefault();
+            window.location.href = `${URL_LOCAL}/users`;
+            // window.location.href = `${URL_INTERNET}/users`;
+        })
+    }
 
 
+    if (botonComprarCarrito) {
+        botonComprarCarrito.addEventListener("click", (event) => {
+            event.preventDefault();
+            window.location.href = `${URL_LOCAL}/cart/${botonComprarCarrito.value}`;
+            // window.location.href = `${URL_INTERNET}/cart/${botonComprarCarrito.value}`;
+        })
+    }
+
+
+
+    // const botonAdminUsuarios = document.getElementById("usuarios")
+
+    // botonAdminUsuarios.addEventListener('click', (event) => {
+    //     event.preventDefault();
+    //     alert('click')
+    //     window.location.href = `http://localhost:8080/users`
+    // })
     // const buttonPurchaseOnCart = document.getElementById('comprarBtn')
 
     // buttonPurchaseOnCart?.addEventListener('click', ((event) => {
@@ -331,9 +362,9 @@
     //     alert(cart._id)
     // }))
 
-    Handlebars.registerHelper('JSONstringify', function (context) {
-        return JSON.stringify(context);
-    });
+    // Handlebars.registerHelper('JSONstringify', function (context) {
+    //     return JSON.stringify(context);
+    // });
 
     function getCookie(name) {
         const value = `; ${document.cookie}`;

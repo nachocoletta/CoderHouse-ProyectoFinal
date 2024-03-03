@@ -59,7 +59,7 @@ router.get('/premium/:uid',
 
 router.post('/:uid/documents/:typeFile',
     passport.authenticate('jwt', { session: false }),
-    uploaderV2.single('file'),
+    // uploaderV2.single('file'),
     // uploaderV2.array('documentsDomicilio', 3),
     async (req, res, next) => {
         try {
@@ -70,8 +70,10 @@ router.post('/:uid/documents/:typeFile',
             // const { documents } = req.file
             const { documentType } = req.body;
             // console.log("documentType", documentType)
+            // console.log({ typeFile, file, uid, documentType })
 
-
+            console.log(req.body)
+            // return res.status(200).send('ok')
             let user = await UsersController.get({ _id: uid });
 
             if (user.length === 0) {
@@ -116,27 +118,33 @@ router.get('/',
     }
 )
 
-
-router.delete('/',
+router.delete('/:uid',
     passport.authenticate('jwt', { session: false }),
     authorizationMiddleware(['admin']),
-    async (req, res, next) => {
-        try {
-            const users = await UsersController.get();
+    UsersController.deleteByIdBis
+);
 
-            let { activeUsers, deletedUsers } = await UsersController.deleteInactiveUser(users);
 
-            return res.status(200).json({
-                activeUsers,
-                deletedUsers
-            })
+// router.delete('/',
+//     passport.authenticate('jwt', { session: false }),
+//     authorizationMiddleware(['admin']),
+//     async (req, res, next) => {
+//         try {
+//             const users = await UsersController.get();
 
-        } catch (error) {
-            console.log('Error', error.message);
-            next(error);
-        }
-    }
-)
+//             let { activeUsers, deletedUsers } = await UsersController.deleteInactiveUser(users);
+
+//             return res.status(200).json({
+//                 activeUsers,
+//                 deletedUsers
+//             })
+
+//         } catch (error) {
+//             console.log('Error', error.message);
+//             next(error);
+//         }
+//     }
+// )
 
 router.delete('/:uid',
     passport.authenticate('jwt', { session: false }),
@@ -147,10 +155,17 @@ router.delete('/:uid',
 
             const user = await UsersController.getById(uid);
 
+            const userId = req.user.id;
+            // console.log("userId", userId)
+            // return res.status(200).json({ message: "ok" })
             if (user.error) {
                 return res.status(404).json({ status: 'error', message: 'Usuario no encontrado en la base de datos' })
             }
 
+            // console.log(userId, uid)
+            if (userId === uid) {
+                return res.status(400).json({ status: "error", message: 'No se puede eliminar su propio usuario' })
+            }
             await UsersController.deleteById(user.id);
             res.status(204).end();
 

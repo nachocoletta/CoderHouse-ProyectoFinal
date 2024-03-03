@@ -34,6 +34,7 @@ router.get('/',
     authorizationMiddleware(['user', 'admin', 'premium']),
     async (req, res, next) => {
         try {
+            // console.log('router products')
             const { page = 1, limit = 10, category, sort } = req.query;
             const options = {
                 page,
@@ -45,7 +46,7 @@ router.get('/',
 
             // console.log("entro aqui")
             if (category) {
-                console.log("query", category)
+                // console.log("query", category)
                 criteria.category = category;
             }
             const result = await ProductsController.get(criteria, options)
@@ -53,7 +54,7 @@ router.get('/',
             res.status(200).json(result);
 
         } catch (error) {
-            console.error(error.message)
+            console.error("Error", error.message)
             next(error);
         }
     })

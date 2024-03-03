@@ -57,7 +57,9 @@ const buildResponse = (data, req) => {
 
 const buildPageLink = (req, page, limit, sort, category) => {
     // console.log("category", category);
-    const baseUrl = `${process.env.HOST}/products?limit=${limit}&page=${page}`;
+
+    // const baseUrl = `${config.host.localhost}/products?limit=${limit}&page=${page}`;
+    const baseUrl = `${config.host.host}/products?limit=${limit}&page=${page}`;
     const categoryParam = category ? `&category=${category}` : '';
     const sortParam = sort ? `&sort=${sort}` : '';
     return `${baseUrl}${categoryParam}${sortParam}`;
@@ -98,18 +100,27 @@ router.get('/',
             }
 
             const result = await ProductController.get(criteria, options)
-            // console.log("build", buildResponse(result, req))
+            // console.log("result", result)
+            // console.log("response", buildResponse(result, req))
             const response = buildResponse(result, req)
             // console.log("req.user", req.user)
-            response.user = req.user;
-            response.user.first_name = req.user.firstName
-            response.user.last_name = req.user.lastName
+            if (req.user.rol !== 'admin') {
+                response.user = req.user;
+                response.user.first_name = req.user.firstName;
+                response.user.last_name = req.user.lastName;
+                response.cartId = req.user.cartId._id;
+                response.carrito = response.user.cartId.products.map((prod) => prod.toJSON())
+                response.carrito.user = req.user;
+            }
+            // console.log("response", response)
+
             // response.user = response.user.toJSON();
-            // console.log("response", response.user)
+            // console.log("response", response.carrito);
             res.render('products', response);
             // res.render('products', buildResponse(result, req))
 
         } catch (error) {
+            console.log("Error", error.message)
             res.status(500).json({ error: error.message })
         }
         // res.status(200).json(result);

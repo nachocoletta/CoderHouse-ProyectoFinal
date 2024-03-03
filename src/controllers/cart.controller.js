@@ -172,42 +172,47 @@ export default class CartController {
         }
     }
     static async createPurchase(cid) {
-        const user = await UsersService.findAll({ cartId: cid });
-        let amount = 0;
+        try {
+            const user = await UsersService.findAll({ cartId: cid });
+            let amount = 0;
 
-        if (user.length > 0) {
-            let cart = await CartsService.findById({ _id: user[0].cartId });
-            let productsWithoutStock = [];
-            let productsWithStock = [];
-            let updatedProducts;
+            console.log("user", user)
+            if (user.length > 0) {
+                let cart = await CartsService.findById({ _id: user[0].cartId._id });
+                let productsWithoutStock = [];
+                let productsWithStock = [];
+                let updatedProducts;
 
-            for (const [index, prod] of cart.products.entries()) {
-                if (prod.productId.stock < prod.quantity) {
-                    console.log('Stock insuficiente');
-                    productsWithoutStock.push({ _id: prod.productId._id, quantity: prod.quantity });
-                } else {
-                    console.log('Hay stock');
-                    productsWithStock.push({ _id: prod.productId._id, quantity: prod.quantity });
-                    updatedProducts = await ProductsController.updateById(prod.productId._id, {
-                        stock: prod.productId.stock - prod.quantity,
-                    });
+                for (const [index, prod] of cart.products.entries()) {
+                    if (prod.productId.stock < prod.quantity) {
+                        // console.log('Stock insuficiente');
+                        productsWithoutStock.push({ _id: prod.productId._id, quantity: prod.quantity });
+                    } else {
+                        // console.log('Hay stock');
+                        productsWithStock.push({ _id: prod.productId._id, quantity: prod.quantity });
+                        updatedProducts = await ProductsController.updateById(prod.productId._id, {
+                            stock: prod.productId.stock - prod.quantity,
+                        });
 
-                    amount += prod.productId.price * prod.quantity;
+                        amount += prod.productId.price * prod.quantity;
 
-                    // Remove product from cart (without worrying about concurrency)
-                    cart = await CartController.removeProductFromCart(cid, prod.productId._id);
+                        // Remove product from cart (without worrying about concurrency)
+                        cart = await CartController.removeProductFromCart(cid, prod.productId._id);
+                    }
                 }
+
+                // Generate ticket after processing all products
+                const ticket = await TicketController.create({
+                    code: getNewId(),
+                    purchase_datetime: Date.now(),
+                    amount,
+                    purchaser: user[0].email,
+                });
+
+                return { user, productsWithoutStock, cart, ticket };
             }
-
-            // Generate ticket after processing all products
-            const ticket = await TicketController.create({
-                code: getNewId(),
-                purchase_datetime: Date.now(),
-                amount,
-                purchaser: user[0].email,
-            });
-
-            return { user, productsWithoutStock, cart, ticket };
+        } catch (error) {
+            console.log("Error", error.message)
         }
     }
 

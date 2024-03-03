@@ -30,11 +30,13 @@ import profileViewRouter from './routers/views/user.router.js'
 import chatViewRouter from './routers/views/chat.router.js';
 import cartViewRouter from './routers/views/carts.router.js';
 import usersViewRouter from './routers/views/users.router.js'
+import ticketsViewRouter from './routers/views/tickets.router.js'
 
 import sessionsRouter from './routers/api/sessions.router.js';
 import jwtRouter from './routers/api/jwt.router.js'
 import logger from './routers/api/logger.router.js'
 import usersRouter from './routers/api/users.router.js'
+import ticketsRouter from './routers/api/tickets.router.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -81,10 +83,36 @@ const swaggerOptions = {
 const specs = swaggerJsDoc(swaggerOptions);
 
 
-
+const hbs = handlebars.create({
+    helpers: {
+        ifCond: function (v1, operator, v2, options) {
+            switch (operator) {
+                case '==':
+                    return v1 == v2 ? options.fn(this) : options.inverse(this);
+                case '===':
+                    return v1 === v2 ? options.fn(this) : options.inverse(this);
+                case '!=':
+                    return v1 != v2 ? options.fn(this) : options.inverse(this);
+                case '!==':
+                    return v1 !== v2 ? options.fn(this) : options.inverse(this);
+                case '<':
+                    return v1 < v2 ? options.fn(this) : options.inverse(this);
+                case '<=':
+                    return v1 <= v2 ? options.fn(this) : options.inverse(this);
+                case '>':
+                    return v1 > v2 ? options.fn(this) : options.inverse(this);
+                case '>=':
+                    return v1 >= v2 ? options.fn(this) : options.inverse(this);
+                default:
+                    return options.inverse(this);
+            }
+        }
+    }
+});
 const publicDir = path.join(utilsDir, '../public');
 app.use(express.static(publicDir));
-app.engine('handlebars', handlebars.engine());
+app.engine('handlebars', hbs.engine);
+// app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'handlebars');
 
@@ -105,12 +133,14 @@ app.use('/api/products', productsApiRouter);
 app.use('/api/carts', cartsApiRouter);
 app.use('/api/logger', logger);
 app.use('/api/users', usersRouter);
+app.use('/api/tickets', ticketsRouter);
 
 app.use('/products', productsViewRouter);
 app.use('/profile', profileViewRouter)
 app.use('/chat', chatViewRouter);
 app.use('/cart', cartViewRouter);
 app.use('/users', usersViewRouter);
+app.use('/tickets', ticketsViewRouter);
 
 
 app.use('/', indexRouter);
