@@ -1,6 +1,6 @@
 
 # *.yaml
-
+*kubeecommerce.yaml*
 # Logs
 logs
 *.log
