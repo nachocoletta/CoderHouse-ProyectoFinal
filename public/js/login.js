@@ -2,7 +2,9 @@
 (function () {
     const URL_LOCAL = `http://localhost:8080`
     const URL_INTERNET = `https://coderhouse-proyectofinal-production.up.railway.app`
+    const URL = `https://coderhouse-proyectofinal-production.up.railway.app`
 
+    // const URL = `http://localhost:8080`;
 
     // document.getElementById('btnLogin').addEventListener("click", (event) => {
     //     if (confirm('login')) {
@@ -47,7 +49,7 @@
                 const email = document.getElementById("mail").value;
                 const password = document.getElementById("pass").value;
 
-                const response = await fetch(`${URL_LOCAL}/auth/login`, {
+                const response = await fetch(`${URL}/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

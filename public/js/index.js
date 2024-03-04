@@ -4,6 +4,9 @@
     const URL_LOCAL = `http://localhost:8080`
     const URL_INTERNET = `https://coderhouse-proyectofinal-production.up.railway.app`
 
+    const URL = `https://coderhouse-proyectofinal-production.up.railway.app`
+
+    // const URL = `http://localhost:8080`;
     const socket = io();
 
     const buttonsAddProductToCart = document.getElementsByClassName("boton")
@@ -31,7 +34,7 @@
                 // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/current');
 
                 // const response = await fetch(`${URL_INTERNET}/auth/current`);
-                const response = await fetch(`${URL_LOCAL}/auth/current`);
+                const response = await fetch(`${URL}/auth/current`);
                 // console.log("response", response)
                 if (response.ok) {
                     data = await response.json();
@@ -250,7 +253,7 @@
                     // Redireccionar al usuario a la URL deseada
                     // window.location.href = `https://coderhouse-proyectofinal-production.up.railway.app/cart/${cartId}`;
 
-                    window.location.href = `${URL_LOCAL}/cart/${cartId}`;
+                    window.location.href = `${URL}/cart/${cartId}`;
                     // window.location.href = `${URL_INTERNET}/cart/${cartId}`;
                 });
                 cartElement.appendChild(seeCart);
@@ -275,7 +278,7 @@
 
         try {
             // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/cart')
-            const response = await fetch(`${URL_LOCAL}/auth/cart`)
+            const response = await fetch(`${URL}/auth/cart`)
             // const response = await fetch(`${URL_INTERNET}/auth/cart`)
 
             if (response.ok) {
@@ -332,7 +335,7 @@
     if (botonAdminUsuarios) {
         botonAdminUsuarios.addEventListener("click", (event) => {
             event.preventDefault();
-            window.location.href = `${URL_LOCAL}/users`;
+            window.location.href = `${URL}/users`;
             // window.location.href = `${URL_INTERNET}/users`;
         })
     }
@@ -342,7 +345,7 @@
         botonComprarCarrito.addEventListener("click", (event) => {
             event.preventDefault();
             // window.location.href = `${URL_LOCAL}/cart/${botonComprarCarrito.value}`;
-            window.location.href = `${URL_INTERNET}/cart/${botonComprarCarrito.value}`;
+            window.location.href = `${URL}/cart/${botonComprarCarrito.value}`;
         })
     }
 

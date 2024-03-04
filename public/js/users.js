@@ -1,7 +1,9 @@
 (function () {
     const URL_LOCAL = `http://localhost:8080`
     const URL_INTERNET = `https://coderhouse-proyectofinal-production.up.railway.app`
+    const URL = `https://coderhouse-proyectofinal-production.up.railway.app`
 
+    // const URL = `http://localhost:8080`;
     const socket = io();
 
 
@@ -12,8 +14,8 @@
     const firstName = decodedToken ? decodedToken.first_name : null;
 
 
-    console.log('UserID:', userId);
-    console.log('FirstName:', firstName);
+    // console.log('UserID:', userId);
+    // console.log('FirstName:', firstName);
 
     function parseJwt(token) {
         try {
@@ -65,7 +67,7 @@
     buttonVolver.addEventListener("click", (event) => {
         event.preventDefault();
         // window.location.href = `${URL_LOCAL}/products`
-        window.location.href = `${URL_INTERNET}/products`
+        window.location.href = `${URL}/products`
     })
     // const selectRolUsuario = document.getElementsByClassName("rolUsuario");
     // console.log(selectRolUsuario)
