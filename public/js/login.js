@@ -31,6 +31,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data) {
+                    console.log('data', data)
+                    accessToken = data.token;
+                    localStorage.setItem('access_token', accessToken)
                     window.location.href = data.redirect
                 }
             })
