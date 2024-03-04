@@ -11,7 +11,7 @@
             // event.preventDefault();
             const email = document.getElementById("mail").value;
             const password = document.getElementById("pass").value;
-
+            let accessToken;
             // fetch(`${URL_INTERNET}/auth/login`, {
             // fetch(`${URL_LOCAL}/auth/login`, {
             //     // fetch(`http://localhost:8080/auth/login`, {
@@ -38,7 +38,7 @@
                 })
                 .then(data => {
                     // console.log('data', data)
-                    const accessToken = data.token;
+                    accessToken = data.token;
                     localStorage.setItem('access_token', accessToken)
 
                     // console.log('data.redirect', data.redirect)
