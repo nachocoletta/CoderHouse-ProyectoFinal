@@ -8,9 +8,9 @@
     const URL_INTERNET = `https://coderhouse-proyectofinal-production.up.railway.app`
 
 
-    const URL = `https://coderhouse-proyectofinal-production.up.railway.app`
+    // const URL = `https://coderhouse-proyectofinal-production.up.railway.app`
 
-    // const URL = `http://localhost:8080`;
+    const URL = URL_INTERNET;
 
     document.getElementById('comprarBtn').addEventListener('click', function () {
         // Obtén el valor del botón "Comprar"

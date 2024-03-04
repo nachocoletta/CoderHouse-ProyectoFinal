@@ -72,7 +72,10 @@ router.post('/login',
                     sameSite: 'None'
                 })
                 .status(200)
-                .json({ status: 'success', token, redirect: '/products' })
+                .json({
+                    status: 'success', token
+                    , redirect: '/products'
+                })
 
         } catch (error) {
             req.logger.error(error.message)
