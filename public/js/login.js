@@ -73,6 +73,7 @@
                 alert('no login');
             }
         } catch (error) {
+            window.location.href = '/products'
             console.error('Error:', error.message);
             // Manejar el error de manera apropiada, como mostrar un mensaje al usuario
         }

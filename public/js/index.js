@@ -34,7 +34,7 @@
                 // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/current');
 
                 // const response = await fetch(`${URL_INTERNET}/auth/current`);
-                const response = await fetch(`${URL}/auth/current`);
+                const response = await fetch(`/auth/current`);
                 // console.log("response", response)
                 if (response.ok) {
                     data = await response.json();
@@ -278,7 +278,7 @@
 
         try {
             // const response = await fetch('https://coderhouse-proyectofinal-production.up.railway.app/auth/cart')
-            const response = await fetch(`${URL}/auth/cart`)
+            const response = await fetch(`/auth/cart`)
             // const response = await fetch(`${URL_INTERNET}/auth/cart`)
 
             if (response.ok) {
