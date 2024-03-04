@@ -29,7 +29,7 @@
                 body: JSON.stringify({ email, password }),
             })
                 .then(response => {
-                    console.log(response)
+                    console.log("response", response)
                     if (!response.ok) {
                         console.log(`HTTP error! Status: ${response.status}`);
                     }
@@ -37,21 +37,21 @@
                     return response.json();
                 })
                 .then(data => {
-                    // console.log('data', data)
+                    console.log('data', data)
                     accessToken = data.token;
                     localStorage.setItem('access_token', accessToken)
 
                     // console.log('data.redirect', data.redirect)
-                    window.location.href = data.redirect
+                    window.location.href = data.redirect // '/products'
                 })
                 .catch(error => {
                     console.log('Error', error.message);
                     // No redirigir aquí
                 })
-                .finally(() => {
-                    // Redirigir de manera predeterminada al final del bloque
-                    window.location.href = `${URL}/products`;
-                });
+            // .finally(() => {
+            //     // Redirigir de manera predeterminada al final del bloque
+            //     window.location.href = `${URL}/products`;
+            // });
         } else {
             alert('no login')
         }

@@ -54,7 +54,7 @@ router.post('/login',
             await UsersController.updateLastConnection(user[0]._id, lastConnection);
 
             const token = tokenGenerator(user[0], 'login');
-            console.log('token', token)
+            // console.log('token', token)
             // console.log('paso por aca')
             // res.status(200).json({ access_token: token })
             // res
@@ -66,7 +66,8 @@ router.post('/login',
             //     .redirect('/products')
             res
                 .cookie('access_token', token, {
-                    maxAge: 1000 * 60 * 60, httpOnly: true,
+                    maxAge: 1000 * 60 * 60,
+                    httpOnly: true,
                     secure: true,
                     sameSite: 'None'
                 })
