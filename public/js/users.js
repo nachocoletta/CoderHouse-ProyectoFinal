@@ -3,7 +3,7 @@
     const URL_INTERNET = `https://coderhouse-proyectofinal-production.up.railway.app`
     // const URL = `https://coderhouse-proyectofinal-production.up.railway.app`
 
-    const URL = `http://localhost:8080`;
+    const URL = URL_INTERNET;
     const socket = io();
 
 
