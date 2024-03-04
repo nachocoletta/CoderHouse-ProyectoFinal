@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8080;
 
 const httpServer = app.listen(PORT, () => {
   // req.logger.info(`Server running on http://localhost:${PORT} 🚀`)
-  loggerDev.info(`Server running on ${config.host.host}:${PORT} 🚀`)
+  loggerDev.info(`Server running on ${config.host.localhost} 🚀`)
   // console.log(`Server running on ${config.host.localhost} 🚀`);
 });
 
