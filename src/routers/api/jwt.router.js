@@ -65,7 +65,11 @@ router.post('/login',
             //     // .json({ status: 'success' })
             //     .redirect('/products')
             res
-                .cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: true })
+                .cookie('access_token', token, {
+                    maxAge: 1000 * 60 * 60, httpOnly: true,
+                    secure: true,
+                    sameSite: 'None'
+                })
                 .status(200)
                 .json({ status: 'success', token, redirect: '/products' })
 
@@ -278,7 +282,11 @@ router.get('/pass-recovery-by-mail',
                 const token = tokenGenerator(user[0], 'recovery')
                 // res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: true }) // linea original
                 // console.log("access_token en pass-recovery-by-mail", req.cookies.access_token)
-                res.cookie('access_token', token, { maxAge: 1000 * 30, httpOnly: true })
+                res.cookie('access_token', token, {
+                    maxAge: 1000 * 30, httpOnly: true,
+                    secure: true,
+                    sameSite: 'None'
+                })
                 await AuthServices.passwordRestore(token)
                 // await AuthServices.passwordRestore(req.cookies.access_token)
 
