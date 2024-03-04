@@ -49,7 +49,7 @@
                 const email = document.getElementById("mail").value;
                 const password = document.getElementById("pass").value;
 
-                const response = await fetch(`${URL}/auth/login`, {
+                const response = await fetch(`/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
