@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8080;
 // const HOST = process.env.HOST || "http://localhost"
 
 // export const ENVIROMENT = 'LOCAL' // 'INTERNET'
-export const ENVIROMENT = 'LOCAL' // 'LOCAL'
+export const ENVIROMENT = 'INTERNET' // 'LOCAL'
 
 export let enviroment;
 
