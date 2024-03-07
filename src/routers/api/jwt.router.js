@@ -9,7 +9,8 @@ import {
     createHash, isValidPassword,
     jwtAuth, tokenGenerator,
     verifyToken, authMiddleware,
-    authorizationMiddleware
+    authorizationMiddleware,
+    clearCookie
 } from '../../helpers/utils.js'
 import passport from 'passport';
 import AuthServices from '../../services/auth.services.js';
@@ -34,7 +35,7 @@ router.post('/login',
         // console.log(password)
         try {
             // const user = await UsersController.getByMail(email)
-            const user = await UsersController.get({ email })
+            const user = await UsersController.get({ email: email.toLowerCase() })
             // console.log(user);
 
 
@@ -50,20 +51,37 @@ router.post('/login',
                 return res.status(401).json({ message: "Correo o password invalidos" })
             }
 
-            UsersController.updateLastConnection(user[0]._id, lastConnection);
+            // console.log(user)
+            await UsersController.updateLastConnection(user[0]._id, lastConnection);
 
             const token = tokenGenerator(user[0], 'login');
+            // console.log('token', token)
             // console.log('paso por aca')
             // res.status(200).json({ access_token: token })
+            // res
+            //     .cookie('access_token',
+            //         token,
+            //         { maxAge: 1000 * 60 * 60, httpOnly: true })
+            //     .status(200)
+            //     // .json({ status: 'success' })
+            //     .redirect('/products')
             res
-                .cookie('access_token',
-                    token,
-                    { maxAge: 1000 * 60 * 60, httpOnly: true })
+                .cookie('access_token', token, {
+                    maxAge: 1000 * 60 * 60,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'None'
+                })
                 .status(200)
-                // .json({ status: 'success' })
-                .redirect('/products')
+                .json({
+                    status: 'success', token
+                    , redirect: '/products'
+                })
+
         } catch (error) {
-            console.log(`Error ${error.message}`);
+            req.logger.error(error.message)
+            // console.log(`Error ${error.message}`);
+            return res.redirect('/login')
             next(error)
             // return res.status(500).json({ error: error.message })
         }
@@ -73,24 +91,36 @@ router.post('/register',
     async (req, res, next) => {
 
         try {
-            // console.log('entra')
             const { body } = req;
 
             console.log("body", body)
-            const newUserToken = await AuthController.register({
+            const newUser = await AuthController.register({
                 ...body,
                 password: createHash(req.body.password)
             });
             // console.log("newUser", newUser)
             // req.logger.info(`Nuevo Usuario ${newUser}`)
             // console.log('newUser', newUser);
-            return res.status(200).json({ status: 'success', message: 'User registered successfully', payload: newUserToken });
+            return res.redirect('/login');
+            // return res.status(200).json({ status: 'success', message: 'User registered successfully', payload: newUser });
         } catch (error) {
             req.logger.error(error.message)
             next(error)
         }
     });
 
+router.post('/logout',
+    // passport.authenticate('jwt', { session: false }),
+    async (req, res, next) => {
+        try {
+            clearCookie(res);
+
+            res.status(200).json({ message: 'Logout exitoso' })
+        } catch (error) {
+            req.logger.error(error.message);
+            next(error);
+        }
+    })
 router.get('/current',
     // jwtAuth,
     authMiddleware('jwt'), // aca le mando la estrategia que quiero usar, en este caso jwt
@@ -207,7 +237,8 @@ router.post('/password-restore/:email',
                         }
                     )
 
-                    return res.status(201).send('Clave actualizada')
+                    return res.redirect('/login')
+                    // return res.status(201).send('Clave actualizada')
                 }
                 res.status(400).json({ error: `La clave no puede ser igual a la anterior` })
 
@@ -243,7 +274,8 @@ router.post('/pass-recovery-by-mail',
 
                 await AuthServices.passwordRestore(user[0].email, token)
 
-                return res.status(200).json({ message: `Mail enviado, revise su casilla de correo: ${email} que contiente un link para restaurar su clave` })
+                return res.redirect('/login')
+                // return res.status(200).json({ message: `Mail enviado, revise su casilla de correo: ${email} que contiente un link para restaurar su clave` })
             }
 
             res.status(404).json({ message: "Usuario no encontrado" });
@@ -267,7 +299,11 @@ router.get('/pass-recovery-by-mail',
                 const token = tokenGenerator(user[0], 'recovery')
                 // res.cookie('access_token', token, { maxAge: 1000 * 60 * 60, httpOnly: true }) // linea original
                 // console.log("access_token en pass-recovery-by-mail", req.cookies.access_token)
-                res.cookie('access_token', token, { maxAge: 1000 * 30, httpOnly: true })
+                res.cookie('access_token', token, {
+                    maxAge: 1000 * 30, httpOnly: true,
+                    secure: true,
+                    sameSite: 'None'
+                })
                 await AuthServices.passwordRestore(token)
                 // await AuthServices.passwordRestore(req.cookies.access_token)
 

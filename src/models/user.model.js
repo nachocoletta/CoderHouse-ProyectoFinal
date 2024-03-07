@@ -42,11 +42,17 @@ userSchema.pre('findOneAndUpdate', function (next) {
 
     next();
 });
+userSchema.pre(['find', 'findOne'], function () {
+    this.populate({
+        path: 'cartId',
+        populate: {
+            path: 'products.productId',
+            model: 'Product',
+            select: 'title'
+        }
+    });
+});
 
 export default mongoose.model('User', userSchema);
-// userSchema.pre('find', function () {
-//     this.populate('cart.products.productId')
-// }).pre('findOne', function () {
-//     this.populate('cart.products.productId')
-// });
+
 

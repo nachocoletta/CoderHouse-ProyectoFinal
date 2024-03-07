@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import config from '../config.js';
+import { enviroment } from '../server.js'
 export default class EmailService {
     static #instance = null;
 
@@ -28,7 +29,8 @@ export default class EmailService {
         return this.sendEmail(
             email,
             `Reseteo de clave`,
-            `Este es el link para restaurar la clave http://localhost:8080/auth/pass-recovery-by-mail/${token}`
+            // `Este es el link para restaurar la clave ${config.host.localhost}/auth/pass-recovery-by-mail/${token}`
+            `Este es el link para restaurar la clave ${enviroment === 'INTERNET' ? config.host.host : config.host.localhost}/auth/pass-recovery-by-mail/${token}`
         )
     }
 

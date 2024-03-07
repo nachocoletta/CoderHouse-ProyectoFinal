@@ -1,0 +1,236 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carts   
+      responses:
+        200:
+          description: Carritos obtenidos
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carts'
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito por su ID
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        200:
+          description: Carrito obtenido por su ID
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carts'
+        404:
+          description: Carrito no encontrado
+        500:
+          description: Error interno del servidor
+    post:
+      summary: Agrega un producto al carrito, se indica el producto y la cantidad en el body
+      tags:
+        - Carts
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/addProductToCart'
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+          type: string
+      responses:
+        201:
+          description: Producto agregado al carrito
+        400:
+          description: No se puede agregar un producto al carrito del cual no se es propietario
+        500:
+          description: Error del servidor
+    delete:
+      summary: Eliminacion de todos los productos del carrito por su ID
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito a vaciar
+          schema:
+            type: string
+      responses:
+        201:
+          description: Carrito vaciado correctamente
+        500:
+          description: Error del servidor
+    put:
+      summary: Actualiza los productos del carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito a modificar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateCart'
+      responses:
+        201: 
+          description: Carrito actualizado correctamente
+        500:
+          description: Error del servidor
+
+  /api/carts/{cid}/products/{pid}:
+    put:
+      summary: Actualiza la cantidad de un producto en el carrito
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+          type: string
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+      responses:
+        200:
+          description: Carrito actualizado correctamente
+        500:
+          description: Error del servidor
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Realiza un compra generando el ticket y dejando en el carrito los productos que no tienen stock suficiente
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+          type: string
+      responses:
+        200:
+          description: Compra realizada
+        500:
+          description: Error del servidor
+          
+components:
+  schemas:
+    Carts:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del carrito
+        products:
+          type: array
+          description: Productos en el carrito
+        createdAt:
+          type: string
+          description: Fecha de creacion
+        updatedAt:
+          type: string
+          description: Fecha de modificación
+      example:
+        _id: 6591bdb14c892e7ada705736,
+        products: [
+            {
+                "productId": {
+                    "_id": "6541485b28be39e92fcacad0",
+                    "title": "titulo de prueba",
+                    "description": "dafdsa",
+                    "code": "fac",
+                    "price": 2,
+                    "status": true,
+                    "stock": 15,
+                    "category": "2",
+                    "thumbnails": [],
+                    "createdAt": "2023-10-31T18:32:59.123Z",
+                    "updatedAt": "2024-01-23T00:04:43.273Z",
+                    "__v": 0
+                },
+                "quantity": 1,
+                "_id": "65b8359c77a772f1421d57b5"
+            }
+        ]
+        createdAt: "2023-12-31T19:14:57.022Z"
+        updatedAt: "2024-01-29T23:32:44.858Z"
+
+  requestBodies:
+    addProductToCart:
+      type: object
+      properties:
+        productId: 
+          type: string
+          description: ID del producto a agregar al carrito
+        quantity:
+          type: integer
+          description: unidades a agregar
+      example:
+        productId: 65b2a5122ff91854e080c3e8
+        quantity: 1
+    updateCart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: ID del producto a agregar al carrito
+              quantity:
+                type: integer
+                description: unidades a agregar
+      example:
+        products:
+          - productId: "65b2a5122ff91854e080c3e8"
+            quantity: 1
+          - productId: "anotherProductId"
+            quantity: 2
+    updateProduct:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: unidades a agregar o quitar
+      example:
+        quantity: 1

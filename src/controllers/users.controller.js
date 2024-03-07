@@ -1,4 +1,5 @@
 import { createHash } from "../helpers/utils.js";
+import { userRepository } from "../repositories/index.js";
 import UsersService from "../services/users.services.js";
 // aqui va la logica de negocio
 
@@ -56,11 +57,38 @@ export default class UsersController {
     }
 
     static async deleteById(uid) {
+        let currentUser = await userRepository.getCurrent()
+        console.log('currentUser', currentUser)
         let user = await UsersController.getById(uid)
         console.log("Eliminando el usuario")
         await UsersService.deleteById(uid)
         console.log(`Usuario con id ${user.id} eliminado correctamente`)
     }
+
+    static async deleteByIdBis(req, res, next) {
+        try {
+            const { uid } = req.params;
+
+            const user = await UsersController.getById(uid);
+
+            const userId = req.user.id;
+
+            if (user.error) {
+                return res.status(404).json({ status: 'error', message: 'Usuario no encontrado en la base de datos' });
+            }
+
+            if (userId === uid) {
+                return res.status(400).json({ status: "error", message: 'No se puede eliminar su propio usuario' });
+            }
+
+            await UsersService.deleteById(uid);
+            res.status(204).end();
+        } catch (error) {
+            console.log("Error", error.message);
+            next(error);
+        }
+    }
+
 
     static async updateLastConnection(uid, last_connection) {
         // let user = await UsersController.getById(uid);

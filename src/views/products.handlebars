@@ -1,19 +1,51 @@
 <article>
   <header>
     <h1>Bienvenido <strong>{{this.user.first_name}} {{this.user.last_name}}</strong></h1>
+    <button id="logout">Logout</button>
   </header>
   <p>Nombre: {{this.user.first_name}}</p>
   <p>Apellido: {{this.user.last_name}}</p>
   <p>Correo: {{this.user.email}}</p>
   <p>Tipo de Usuario: <strong>{{this.user.rol}}</strong> </p>
   
-  </form>
   <footer>
-    <a href="/api/sessions/logout" role="button">Logout</a>
-  </footer>
-</article>
+    {{!-- <a href="/api/sessions/logout" role="button">Logout</a> --}}
+  
+{{!-- </article> --}}
 
-<h1>Productos Paginados</h1>
+{{!-- <article> --}}
+
+  {{#ifCond this.user.rol '!==' 'admin'}}
+<h1>Carrito</h1>
+<div>
+  <div class="cart">
+    {{!-- <h3>Carrito</h3> --}}
+    {{!-- <p>cartId {{cartId}}</p> --}}
+    {{!-- <ul>
+      {{#if this.carrito}}
+        {{#each carrito}}
+          <li>
+            
+            <p><strong>Title:</strong> {{this.productId.title}}<strong> - Description:</strong> {{this.productId.description}} - <strong>Code:</strong> {{this.productId.code}} - <strong>Price:</strong> ${{this.productId.price}}.- <strong>Quantity:</strong> {{this.quantity}}</p>
+          
+          </li>
+        {{/each}}
+      {{else}}
+        <li>No hay productos en el carrito.</li>
+      {{/if}}
+    </ul> --}}
+  <button id="btnComprarCarrito" value={{cartId}}>Checkout</button>
+  </div>
+</div>
+
+{{else}}
+<div>
+  <button id="usuarios">Usuarios</button>
+</div>
+{{/ifCond}}
+</footer>
+</article>
+<h1>Productos</h1>
 <table id="main" role="grid">
 <tr>
     <th>ID</th>
@@ -36,7 +68,7 @@
     <td>{{this.price}}</td>
     <td>{{this.stock}}</td>
     <td>{{this.category}}</td>
-    <td><input type="text" id={{this._id}} style="width: 80px;" required></td>
+    <td><input type="number" id={{this._id}} style="width: 80px;" required min="1"></td>
     <td><button id={{this._id}} class="boton">ADD</button></td>
     <td>
   {{#if this.thumbnails}}
@@ -61,10 +93,10 @@
 <div id="carts">
 </div>
   
+{{#ifCond this.user.rol '===' 'admin'}}
+
 <div>
   <h1>Products</h1>
-  
-  
     <div style="display: flex; flex-direction: row; justify-content: space-between;">
         <!-- Columna 1 -->
         <div style="flex: 1;">
@@ -133,63 +165,16 @@
         </div>
     </div>
 </div>
-
-
+{{/ifCond}}
+{{!-- 
 <h1>Products in Real Time</h1>
 <div id="log-products-in-real-time">
-</div>
+</div> --}}
 
 <h1>Tickets</h1>
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
-<div style="flex: 1;"><p>Hola</p></div>
-<div style="flex: 1;"><p>Amego</p></div>
-    
 </div>
 
-<h1>Carts</h1>
-<div style="display: flex; flex-direction: row; justify-content: space-between;">
-  {{!-- <div style="flex: 1;">
-    <form id="create-cart">
-      <h2>Create Cart</h2>
-      <button type="submit">Create Cart</button>
-    </form>
-  </div> --}}
-  <div style="flex: 1;">
- {{!-- <form id="add-product-to-cart" action="/api/carts/{{cartId}}" method="post">
-  <h2>Add Product to cart</h2>
-  <label for="cart-input-id-product-to-cart">Cart ID:</label>
-  <input type="text" id="cart-input-id-product-to-cart" name="cartId" value="{{cartId}}" required>
-
-  <label for="input-id-product-to-cart">Product ID:</label>
-  <input type="text" id="input-id-product-to-cart" name="id-product-to-cart" required>
-
-  <label for="input-quantity-product-in-cart">Quantity:</label>
-  <input type="text" id="input-quantity-product-in-cart" name="quantity-product-in-cart">
-  <button type="submit">Add</button>
-</form> --}}
-
-    <form id="add-product-to-cart">
-      <h2>Add Product to cart</h2>
-      {{!-- <label for="cart-input-id-product-to-cart">Cart ID:</label>
-      <input type="text" id="cart-input-id-product-to-cart" name="cart-input-id-product-to-cart" required> --}}
-
-      <label for="input-id-product-to-cart">Product ID:</label>
-      <input type="text" id="input-id-product-to-cart" name="id-product-to-cart" required>
-
-      <label for="input-quantity-product-in-cart">Quantity:</label>
-      <input type="text" id="input-quantity-product-in-cart" name="quantity-product-in-cart">
-      <button type="submit">Add</button>
-     </form>
-  </div>
-  <div style="flex: 1;">
-    <form id="remove-cart">
-      <h2>Remove cart</h2>
-      <label for="cart-input-id-product-to-remove">Cart ID:</label>
-      <input type="text" id="cart-input-id-product-to-remove" name="cart-input-product-to-remove">
-      <button type="submit">Remove Cart</button>
-    </form>
-  </div>
-</div>
 
 
 

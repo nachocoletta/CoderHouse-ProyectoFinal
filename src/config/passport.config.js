@@ -5,7 +5,7 @@ import { createHash, isValidPassword } from '../helpers/utils.js';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import UserManager from '../dao/UserManager.js';
 import UsersController from '../controllers/users.controller.js';
-// import 'dotenv/config';
+import 'dotenv/config';
 
 import config from '../config.js';
 
@@ -14,9 +14,9 @@ const options = {
     passReqToCallback: true,
 }
 const githubOptions = {
-    clientID: config.github.clientGithub,
-    clientSecret: config.github.secretGithub,
-    callbackURL: config.github.urlCallbackGithub
+    clientID: process.env.CLIENT_GITHUB,
+    clientSecret: process.env.SECRET_GITHUB,
+    callbackURL: process.env.URL_CALLBACK_GITHUB
 }
 
 const JWTOptions = {

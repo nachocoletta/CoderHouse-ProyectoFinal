@@ -13,7 +13,6 @@ import passport from "passport";
 import UsersService from "../services/users.services.js";
 
 import config from "../config.js";
-import { log } from "console";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -174,7 +173,7 @@ const storageV2 = multer.diskStorage({
 export const uploaderV2 = multer({
     storage: storageV2, fileFilter: (req, file, cb) => {
         const { documentType } = req.body;
-        console.log("documentType en fileFilter", req.body)
+        // console.log("documentType en fileFilter", req.body)
         cb(null, true)
     }
 })
@@ -184,6 +183,8 @@ const JWT_SECRET = config.jwtSecret;
 export const tokenGenerator = (user, typeOfToken) => {
     const { _id, first_name, last_name, email } = user
 
+    // console.log("req.user en tokenGenerator", user)
+    // console.log(_id)
     const payload = {
         id: _id,
         first_name,
@@ -221,11 +222,13 @@ export const jwtAuth = (req, res, next) => {
     // aca authorization va en minuscula pese a que en el header viene en mayuscula
     const { authorization: token /*renombrado a token */ } = req.headers; // busca en la cabecera el token y se guarda en authorization
     if (!token) {
-        return res.status(401).json({ message: 'unauthorized' })
+        // return res.status(401).json({ message: 'unauthorized' })
+        return res.status(401).redirect('/login')
     }
     jwt.verify(token, JWT_SECRET, async (error, payload) => {
         if (error) {
-            return res.status(403).json({ message: 'no authorized' })
+            // return res.status(403).json({ message: 'no authorized' })
+            return res.status(401).redirect('/login')
         }
         req.user = await UsersService.findById(payload.id)
         // req.user = await UserManager.getById(payload.id)
@@ -255,12 +258,23 @@ export const authMiddleware = (strategy) => (req, res, next) => { // funcion que
 export const authorizationMiddleware = (roles) => (req, res, next) => {
     // console.log("req.user", req.user)
     if (!req.user) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).redirect('/products')
+        // return res.status(401).json({ message: 'Unauthorized' });
     }
 
     const { rol: userRole } = req.user;
     if (!roles.includes(userRole)) {
-        return res.status(403).json({ message: 'Forbidden' });
+        return res.status(403).redirect('/products')
+        // return res.status(403).json({ message: 'Forbidden' });
     }
     next();
 }
+
+export const clearCookie = (res) => {
+    res.clearCookie('access_token', {
+        httpOnly: true,
+        expires: new Date(0),
+        secure: true, // Ajusta según tu configuración
+        sameSite: 'None' // Ajusta según tu configuración
+    });
+};
