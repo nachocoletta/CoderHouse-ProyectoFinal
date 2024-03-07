@@ -8,8 +8,8 @@ import 'dotenv/config';
 import { loggerDev, loggerProd } from './config/logger.js';
 // await init();
 
-export const ENVIROMENT = 'LOCAL' // 'INTERNET'
-// export const ENVIROMENT = 'INTERNET' // 'LOCAL'
+// export const ENVIROMENT = 'LOCAL' // 'INTERNET'
+export const ENVIROMENT = 'INTERNET' // 'LOCAL'
 
 // const server = http.createServer(app);
 const PORT = process.env.PORT || 8080;
