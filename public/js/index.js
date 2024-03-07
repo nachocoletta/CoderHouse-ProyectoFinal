@@ -9,6 +9,23 @@
     const URL = URL_INTERNET;
     const socket = io();
 
+    const buttonLogout = document.getElementById('logout');
+
+    buttonLogout.addEventListener('click', () => {
+
+        fetch('/auth/logout', {
+            method: 'POST', // o 'GET' dependiendo de tu configuración
+            credentials: 'include' // incluirá las cookies en la solicitud
+        }).then(response => {
+            // Manejar la respuesta del servidor, por ejemplo, redireccionar al usuario
+            // console.log("response", response)
+            window.location.href = '/login';
+        }).catch(error => {
+            console.error('Error al hacer logout:', error);
+        });
+    });
+
+
     const buttonsAddProductToCart = document.getElementsByClassName("boton")
     const arrayOfButtons = Array.from(buttonsAddProductToCart)
     arrayOfButtons.forEach(element => {
@@ -253,8 +270,8 @@
                     // Redireccionar al usuario a la URL deseada
                     // window.location.href = `https://coderhouse-proyectofinal-production.up.railway.app/cart/${cartId}`;
 
-                    window.location.href = `${URL}/cart/${cartId}`;
-                    // window.location.href = `${URL_INTERNET}/cart/${cartId}`;
+                    // window.location.href = `${URL}/cart/${cartId}`;
+                    window.location.href = `/cart/${cartId}`;
                 });
                 cartElement.appendChild(seeCart);
                 cartElement.appendChild(buyButton);
@@ -335,8 +352,8 @@
     if (botonAdminUsuarios) {
         botonAdminUsuarios.addEventListener("click", (event) => {
             event.preventDefault();
-            window.location.href = `${URL}/users`;
-            // window.location.href = `${URL_INTERNET}/users`;
+            // window.location.href = `${URL}/users`;
+            window.location.href = `/users`;
         })
     }
 
@@ -344,8 +361,8 @@
     if (botonComprarCarrito) {
         botonComprarCarrito.addEventListener("click", (event) => {
             event.preventDefault();
-            // window.location.href = `${URL_LOCAL}/cart/${botonComprarCarrito.value}`;
-            window.location.href = `${URL}/cart/${botonComprarCarrito.value}`;
+            // window.location.href = `${URL}/cart/${botonComprarCarrito.value}`;
+            window.location.href = `/cart/${botonComprarCarrito.value}`;
         })
     }
 

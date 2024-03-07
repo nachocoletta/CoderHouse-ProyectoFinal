@@ -66,8 +66,8 @@
 
     buttonVolver.addEventListener("click", (event) => {
         event.preventDefault();
-        // window.location.href = `${URL_LOCAL}/products`
-        window.location.href = `${URL}/products`
+        // window.location.href = `${URL}/products`
+        window.location.href = `/products`
     })
     // const selectRolUsuario = document.getElementsByClassName("rolUsuario");
     // console.log(selectRolUsuario)

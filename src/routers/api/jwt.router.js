@@ -9,7 +9,8 @@ import {
     createHash, isValidPassword,
     jwtAuth, tokenGenerator,
     verifyToken, authMiddleware,
-    authorizationMiddleware
+    authorizationMiddleware,
+    clearCookie
 } from '../../helpers/utils.js'
 import passport from 'passport';
 import AuthServices from '../../services/auth.services.js';
@@ -108,6 +109,18 @@ router.post('/register',
         }
     });
 
+router.post('/logout',
+    // passport.authenticate('jwt', { session: false }),
+    async (req, res, next) => {
+        try {
+            clearCookie(res);
+
+            res.status(200).json({ message: 'Logout exitoso' })
+        } catch (error) {
+            req.logger.error(error.message);
+            next(error);
+        }
+    })
 router.get('/current',
     // jwtAuth,
     authMiddleware('jwt'), // aca le mando la estrategia que quiero usar, en este caso jwt

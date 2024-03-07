@@ -1,13 +1,13 @@
 <article>
   <header>
     <h1>Bienvenido <strong>{{this.user.first_name}} {{this.user.last_name}}</strong></h1>
+    <button id="logout">Logout</button>
   </header>
   <p>Nombre: {{this.user.first_name}}</p>
   <p>Apellido: {{this.user.last_name}}</p>
   <p>Correo: {{this.user.email}}</p>
   <p>Tipo de Usuario: <strong>{{this.user.rol}}</strong> </p>
   
-  </form>
   <footer>
     {{!-- <a href="/api/sessions/logout" role="button">Logout</a> --}}
   

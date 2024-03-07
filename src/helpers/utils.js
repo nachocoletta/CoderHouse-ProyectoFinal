@@ -13,7 +13,6 @@ import passport from "passport";
 import UsersService from "../services/users.services.js";
 
 import config from "../config.js";
-import { log } from "console";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -270,3 +269,12 @@ export const authorizationMiddleware = (roles) => (req, res, next) => {
     }
     next();
 }
+
+export const clearCookie = (res) => {
+    res.clearCookie('access_token', {
+        httpOnly: true,
+        expires: new Date(0),
+        secure: true, // Ajusta según tu configuración
+        sameSite: 'None' // Ajusta según tu configuración
+    });
+};
