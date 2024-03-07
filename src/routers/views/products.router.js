@@ -7,7 +7,7 @@ import ProductController from '../../controllers/products.controller.js'
 import config from "../../config.js";
 import passport from "passport";
 import 'dotenv/config';
-import { ENVIROMENT } from "../../server.js";
+import { ENVIROMENT, enviroment } from "../../server.js";
 
 const router = Router();
 const privateRouter = (req, res, next) => {
@@ -61,7 +61,7 @@ const buildPageLink = (req, page, limit, sort, category) => {
 
     // const baseUrl = `${config.host.localhost}/products?limit=${limit}&page=${page}`;
     let baseUrl;
-    if (ENVIROMENT === 'INTERNET') {
+    if (enviroment === 'INTERNET') {
         baseUrl = `${config.host.host}/products?limit=${limit}&page=${page}`;
     } else {
         baseUrl = `${config.host.localhost}/products?limit=${limit}&page=${page}`;
