@@ -42,13 +42,13 @@ router.post('/login',
             if (user.length === 0) {
                 // console.log('1')
                 req.logger.warning(`Correo o password invalidos`)
-                return res.status(401).json({ message: "Correo o password invalidos" })
+                return res.status(401).json({ message: "Correo o password invalidos", redirect: '/login' })
             }
             const isPassValid = isValidPassword(password, user[0])
             if (!isPassValid) {
                 // console.log('2')
                 req.logger.warning(`Correo o password invalidos`)
-                return res.status(401).json({ message: "Correo o password invalidos" })
+                return res.status(401).json({ message: "Correo o password invalidos", redirect: '/login' })
             }
 
             // console.log(user)
@@ -81,7 +81,7 @@ router.post('/login',
         } catch (error) {
             req.logger.error(error.message)
             // console.log(`Error ${error.message}`);
-            return res.redirect('/login')
+            res.status(401).json({ status: 'error', redirect: '/login' })
             next(error)
             // return res.status(500).json({ error: error.message })
         }

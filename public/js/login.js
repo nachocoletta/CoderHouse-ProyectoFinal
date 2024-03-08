@@ -56,6 +56,7 @@
             // })
             .catch(error => {
                 console.log('Error', error.message);
+                // window.location.href = '/login'
                 // No redirigir aquí
             })
         // .finally(() => {
