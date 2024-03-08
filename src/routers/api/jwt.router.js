@@ -93,7 +93,7 @@ router.post('/register',
         try {
             const { body } = req;
 
-            console.log("body", body)
+            // console.log("body", body)
             const newUser = await AuthController.register({
                 ...body,
                 password: createHash(req.body.password)
@@ -146,8 +146,8 @@ router.get('/cart',
     async (req, res) => {
         // console.log(req.user);
         try {
-            console.log("entra a estrategia current")
-            console.log("req.user", req.user)
+            // console.log("entra a estrategia current")
+            // console.log("req.user", req.user)
 
             // const user = await userRepository.getCurrent(req.user.id)
 
@@ -230,7 +230,7 @@ router.post('/password-restore/:email',
                     //aca debo cambiarla
                     const user = await UsersService.findAll({ email })
 
-                    console.log("user", user)
+                    // console.log("user", user)
                     await UsersService.updateById(user[0]._id,
                         {
                             password: createHash(pass)

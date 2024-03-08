@@ -7,7 +7,7 @@ import ProductController from '../../controllers/products.controller.js'
 import config from "../../config.js";
 import passport from "passport";
 import 'dotenv/config';
-import { ENVIROMENT, enviroment } from "../../server.js";
+import { enviroment } from "../../server.js";
 
 const router = Router();
 const privateRouter = (req, res, next) => {

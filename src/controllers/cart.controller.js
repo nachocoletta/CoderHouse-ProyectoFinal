@@ -30,7 +30,7 @@ export default class CartController {
 
     static async addProductToCart(cartId, productId, quantity) {
         try {
-            console.log('entra al controlador');
+            // console.log('entra al controlador');
             // console.log("cartId", cartId)
             const user = await UsersService.findAll({ cartId })
 
@@ -45,7 +45,7 @@ export default class CartController {
             if (!cart) {
                 throw new Exception('No se encontro el carrito', 404)
             }
-
+            console.log("cart.products", cart.products)
             const existingProductIndex = cart.products.findIndex(
                 (product) => String(product.productId._id) === String(productId)
             );
@@ -55,8 +55,14 @@ export default class CartController {
             } else {
                 cart.products.push({ productId, quantity })
             }
-            const updatedCart = await CartsService.updateById(cartId, cart.products)
-            return updatedCart;
+
+            console.log("cart.products", cart.products)
+            const updatedCart = await CartsService.updateById(cartId, cart.products);
+
+            const cartUpdated = await CartsService.findById(cartId);
+            // console.log("cartUpdated", cartUpdated)
+            return cartUpdated;
+            // return updatedCart;
         } catch (error) {
             console.error("Error", error.message);
             throw new Exception("Error al agregar producto al carrito", 500)
@@ -154,11 +160,11 @@ export default class CartController {
             }
             // primero que nada vacio el carrito...
             await CartController.removeAllProductsFromCart(cid);
-            console.log('carrito vacio')
+            // console.log('carrito vacio', await CartController.getById(cid))
             // console.log('products.products', products.products)
-            products.products.forEach(prod => {
-                console.log("prod", prod)
-                this.addProductToCart(cid, prod.productId, prod.quantity)
+            products.products.forEach(async (prod) => {
+                // console.log("prod", cid, prod)
+                await CartController.addProductToCart(cid, prod.productId, prod.quantity)
             })
 
 
@@ -176,40 +182,46 @@ export default class CartController {
             const user = await UsersService.findAll({ cartId: cid });
             let amount = 0;
 
-            console.log("user", user)
+            // console.log("user", user)
             if (user.length > 0) {
                 let cart = await CartsService.findById({ _id: user[0].cartId._id });
-                let productsWithoutStock = [];
-                let productsWithStock = [];
-                let updatedProducts;
 
-                for (const [index, prod] of cart.products.entries()) {
-                    if (prod.productId.stock < prod.quantity) {
-                        // console.log('Stock insuficiente');
-                        productsWithoutStock.push({ _id: prod.productId._id, quantity: prod.quantity });
-                    } else {
-                        // console.log('Hay stock');
-                        productsWithStock.push({ _id: prod.productId._id, quantity: prod.quantity });
-                        updatedProducts = await ProductsController.updateById(prod.productId._id, {
-                            stock: prod.productId.stock - prod.quantity,
-                        });
+                // console.log("cart en createPurchase", cart)
+                if (cart.products.length > 0) {
+                    let productsWithoutStock = [];
+                    let productsWithStock = [];
+                    let updatedProducts;
 
-                        amount += prod.productId.price * prod.quantity;
+                    for (const [index, prod] of cart.products.entries()) {
+                        if (prod.productId.stock < prod.quantity) {
+                            // console.log('Stock insuficiente');
+                            productsWithoutStock.push({ _id: prod.productId._id, quantity: prod.quantity });
+                        } else {
+                            // console.log('Hay stock');
+                            productsWithStock.push({ _id: prod.productId._id, quantity: prod.quantity });
+                            updatedProducts = await ProductsController.updateById(prod.productId._id, {
+                                stock: prod.productId.stock - prod.quantity,
+                            });
 
-                        // Remove product from cart (without worrying about concurrency)
-                        cart = await CartController.removeProductFromCart(cid, prod.productId._id);
+                            amount += prod.productId.price * prod.quantity;
+
+                            // Remove product from cart (without worrying about concurrency)
+                            cart = await CartController.removeProductFromCart(cid, prod.productId._id);
+                        }
                     }
+
+                    // Generate ticket after processing all products
+                    const ticket = await TicketController.create({
+                        code: getNewId(),
+                        purchase_datetime: Date.now(),
+                        amount,
+                        purchaser: user[0].email,
+                    });
+
+                    return { user, productsWithoutStock, cart, ticket };
+                } else {
+                    throw new Error('El carrito esta vacio, no se puede realizar la compra')
                 }
-
-                // Generate ticket after processing all products
-                const ticket = await TicketController.create({
-                    code: getNewId(),
-                    purchase_datetime: Date.now(),
-                    amount,
-                    purchaser: user[0].email,
-                });
-
-                return { user, productsWithoutStock, cart, ticket };
             }
         } catch (error) {
             console.log("Error", error.message)

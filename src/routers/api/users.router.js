@@ -72,7 +72,7 @@ router.post('/:uid/documents/:typeFile',
             // console.log("documentType", documentType)
             // console.log({ typeFile, file, uid, documentType })
 
-            console.log(req.body)
+            // console.log(req.body)
             // return res.status(200).send('ok')
             let user = await UsersController.get({ _id: uid });
 

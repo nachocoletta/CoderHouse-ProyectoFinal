@@ -10,7 +10,7 @@ const router = Router();
 
 const buildResponse = (data, req) => {
 
-    console.log("data", data)
+    // console.log("data", data)
     return {
         title: "Profile",
         status: "success",
