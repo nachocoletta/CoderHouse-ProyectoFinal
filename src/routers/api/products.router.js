@@ -101,7 +101,7 @@ router.post('/',
         // console.log('body', body);
         // console.log('Files:', req.files);
         const { title, description, code, price, stock, category } = req.body;
-        console.log("req.user en post products", req.user)
+        // console.log("req.user en post products", req.user)
         try {
             if (!title || !description || !code || !price || !stock || !category) {
                 // console.log("title", title)

@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8080;
 // const HOST = process.env.HOST || "http://localhost"
 
 // export const ENVIROMENT = 'LOCAL' // 'INTERNET'
-export const ENVIROMENT = 'INTERNET' // 'LOCAL'
+// export const ENVIROMENT = 'INTERNET' // 'LOCAL'
 
 export let enviroment;
 
@@ -24,13 +24,13 @@ if (parseInt(PORT) === 8080) {
   enviroment = 'INTERNET'
 }
 
+loggerDev.info(`Enviroment ${enviroment}`)
 const httpServer = app.listen(PORT, () => {
   // req.logger.info(`Server running on http://localhost:${PORT} 🚀`)
   if (enviroment === 'LOCAL') {
     loggerDev.info(`Server running on ${config.host.localhost} 🚀`)
   }
   else {
-    console.log("enviroment", enviroment)
     loggerDev.info(`Server running on ${config.host.host}:${PORT} 🚀`)
   }
 
