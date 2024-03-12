@@ -80,7 +80,7 @@ router.post('/mockingproducts',
     passport.authenticate('jwt', { session: false }),
     authorizationMiddleware('admin'),
     async (req, res, next) => {
-        const PRODUCTS_QUANTITY = 5
+        const PRODUCTS_QUANTITY = 70
         try {
             await ProductsController.createFakeProduct(PRODUCTS_QUANTITY)
             return res.status(200).json({ message: "Productos creados" })

@@ -12,6 +12,24 @@
 
     const URL = URL_INTERNET;
 
+
+    const buttonRemoveProductFromCart = document.getElementsByClassName("eliminar");
+    const arrayOfUserButtons = Array.from(buttonRemoveProductFromCart);
+    arrayOfUserButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            // event.preventDefault();
+
+            if (confirm("Desea eliminar el producto del carrito?")) {
+                const url = window.location.href;
+                const parts = url.split('/');
+                const cartId = parts[parts.length - 1];
+                console.log("cartId", cartId);
+                socket.emit('removeProductFromCart', cartId, button.id)
+                window.location.href = `/products`;
+            }
+        })
+    })
+
     document.getElementById('comprarBtn').addEventListener('click', function () {
         const cartId = this.value;
 

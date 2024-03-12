@@ -278,7 +278,8 @@ router.post('/pass-recovery-by-mail',
                 // return res.status(200).json({ message: `Mail enviado, revise su casilla de correo: ${email} que contiente un link para restaurar su clave` })
             }
 
-            res.status(404).json({ message: "Usuario no encontrado" });
+            return res.redirect('/login')
+            // res.status(404).json({ message: "Usuario no encontrado" });
             // res.status(200).json({ message: "Si el usuario existia se envio un mail con un link para restablecer la clave" })
         } catch (error) {
             console.log('error', error.message)
@@ -310,7 +311,8 @@ router.get('/pass-recovery-by-mail',
                 return res.status(200).json({ token })
             }
 
-            res.status(404).json({ message: "Usuario no encontrado" });
+            return res.redirect('/login')
+            // res.status(404).json({ message: "Usuario no encontrado" });
             // res.status(200).json({ message: "Si el usuario existia se envio un mail con un link para restablecer la clave" })
         } catch (error) {
             console.log('error', error.message)
