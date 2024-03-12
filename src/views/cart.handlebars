@@ -8,11 +8,12 @@
         <td>{{this._id}}</td>
     </tr> --}}
     <tr>
-        <th>Product ID</th>
-        <th>Title</th>
-        <th>Price</th>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Precio</th>
         <th>Stock</th>
-        <th>Quantity</th>
+        <th>Cantidad</th>
+        <th>Eliminar</th>
     </tr>
     {{#each payload}}
     <tr>
@@ -21,6 +22,7 @@
         <td>{{this.productId.price}}</td>
         <td>{{this.productId.stock}}</td>
         <td>{{this.quantity}}</td>
+        <td><button id={{this.productId._id}} class="eliminar">⛔</button></td>
     </tr>
     {{/each}}
 

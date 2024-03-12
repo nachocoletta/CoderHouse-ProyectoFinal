@@ -109,6 +109,13 @@ export const init = async (httpServer) => {
             // console.log(findedProduct);
         })
 
+        socketClient.on('removeProductFromCart', async (cid, pid) => {
+            await CartController.removeProductFromCart(cid, pid);
+            // io.emit('listCarts', cid)
+            // let carts = await CartController.get()
+            // io.emit('listCarts', carts)
+        })
+
         socketClient.on('deleteCart', async (cartId) => {
             await CartController.deleteById(cartId);
             let carts = await CartController.get()
