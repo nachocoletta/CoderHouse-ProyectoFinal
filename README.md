@@ -11,13 +11,21 @@ Este proyecto consiste en el desarrollo de una aplicación web backend que propo
 # Tecnologías Utilizadas
 
 Node.js: Plataforma de ejecución de JavaScript utilizada para construir el backend de la aplicación.
+
 Express.js: Framework de Node.js utilizado para crear la API RESTful y manejar las rutas de la aplicación.
+
 MongoDB: Base de datos NoSQL utilizada para almacenar los datos de la aplicación.
+
 JWT: Para la autenticación y autorización de usuarios.
+
 Nodemailer: Librería de Node.js utilizada para el envío de correos electrónicos.
+
 Docker: Utilizado para el contenerización de la aplicación y facilitar su despliegue.
+
 Handlebars: Para el server-side rendering de las vistas.
-Instalación y Uso
+
+# Instalación y Uso
+
 Clona este repositorio en tu máquina local utilizando git clone.
 Instala las dependencias del proyecto utilizando npm install.
 Configura las variables de entorno en un archivo .env siguiendo el formato del archivo .env.example.
